@@ -1,0 +1,249 @@
+#root {
+    background-color: #D9D9D9;
+}
+
+input {
+    height: 1.5vw;
+    font-size: 1vw;
+}
+
+.page {
+    width: 100vw;
+    height: 100vw;
+    display: flex;
+    padding: 2vw;
+    padding-top: 0vw;
+}
+
+.leftMenu {
+    background-color: #2e0002;
+    height: 80%;
+    width: 13%;
+    margin-left: 2vw;
+}
+
+.rightMenu {
+    background-color: #9a9a9a82;
+    height: 80%;
+    flex-grow: 1;
+    margin-left: 1.5vw;
+    margin-right: 4vw;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.categories {
+    display: flex;
+    flex-direction: column;
+    gap: 3vw;
+    padding-top: 3vw;
+}
+
+.leftMenu .categories .flexItem {
+    text-align: center;
+    display: block;
+    width: 90%;
+    height: auto;
+    padding: 1.5vw;
+    margin-left: 5%;
+    background-color: #220002;
+    outline: 0.1vw solid black;
+}
+
+.leftMenu .categories .flexItem a{
+    font-size: 1.6vw;
+    color: white;
+}
+
+.addProduct {
+    background-color: rgb(237, 235, 235);
+    width: 45%;
+    margin: 2vw;
+}
+
+.addProduct .title {
+    font-size: 1.6vw;
+    display: block;
+    padding-top: 1vw;
+    text-align: center;
+}
+
+.addProduct form{
+    display: flex;
+    flex-direction: column;
+    gap: 1.3vw;
+    padding: 2vw;
+}
+
+.addProduct form a {
+    padding-right: 0.3vw;
+}
+
+.editProduct label {
+    padding-right: 0.3vw;
+}
+
+.addProduct form button {
+    font-size: 1.5vw;
+    margin-left: 33%;
+    padding: 1vw;
+    margin-top: 1.5vw;
+}
+
+.displayProducts {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.productTable {
+    overflow-y: auto; /* Enables vertical scrolling */
+    height: 36%; /* Ensure this is not more than its parent container */
+    margin-top: 40px;
+  }
+  
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+  
+  th, td {
+    text-align: left;
+    padding: 1vw;
+    text-align: center;
+  }
+
+  
+thead tr {
+    position: -webkit-sticky; /* for Safari */
+    position: sticky;
+    top: 0; /* set top offset to 0 to stick at the top of the container */
+    z-index: 2; /* ensures the header is above other table content */
+    font-size: 1.15vw;
+}
+
+tbody tr {
+    font-size: 1vw;
+}
+
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  td img {
+    width: 5vw;
+  }
+
+  .allProducts {
+    padding: 1.6vw;
+    padding-bottom: 0vw;
+    padding-top: 0vw;
+  }
+
+  .productFilters {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .productFilters input {
+    font-size: 0.9vw;
+    margin: 0.3vw;
+  }
+
+  .productFilters button {
+    height: 2vw;
+    font-size: 0.8vw;
+    margin-left: 1vw;
+  }
+
+  .searchProduct input{
+    width: 100%;
+  }
+
+  .products {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .discountProduct .discountNum{
+    width: 14.5%;
+  }
+
+  .discountProduct{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    flex-grow: 1;
+  }
+
+  .orderFilters {
+    margin-top: 2vw;
+    display: flex;
+    flex-direction: column;
+    gap: 2vw;
+  }
+  
+  .orderFilters > div {
+    display: flex;
+    gap: 0.5vw;
+    align-items: center;
+  }
+
+  .orderFilters button {
+    font-size: 1vw;
+    padding: 0.3vw;
+  }
+
+  .productTable select {
+    height: 1.5vw;
+    font-size: 0.9vw;
+  } 
+
+
+  .allUsers {
+    padding: 1.6vw;
+    padding-bottom: 0vw;
+    padding-top: 2.3vw;
+  }
+
+  .chat {
+    background-color: black;
+    width: 100%;
+    height: auto;
+    display: flex;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    margin-top: .5vw;
+  }
+
+  .conversations {
+    height: auto;
+    width: 20%;
+    background-color: #9a9a9a82;
+    padding: 1vw;
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+  }
+
+  .conversations .conversation {
+    background-color: #D9D9D9;
+    width: 100%;
+    height: 4vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1vw;
+  }
+
+  .conversations .conversation a {
+    font-size: 1.5vw;
+  }
+
+  .messages {
+    height: auto;
+    flex-grow: 1;
+    background-color: #D9D9D9;
+  }

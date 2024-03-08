@@ -1,0 +1,57 @@
+.login {
+    width: 30vw;
+    height: auto;
+    margin: auto;
+    padding-top: 50px;
+}
+
+
+.login .image img {
+    width: 100%;
+    display: block; /* Needed to apply margins to an image */
+    margin-bottom: auto;
+    object-fit: contain;
+  }
+
+  .loginRegister {
+    height: 100%;
+    background-color: #1A1A1A;
+    width: 100%;
+    color: white;
+    text-align: center;
+  }
+
+  .loginRegister a{
+    display: block;
+    padding-top: 1.5vw;
+    font-size: 1.5vw;
+  }
+
+.loginPanel {
+    background-color: #33333380;
+    height: 25vw;
+    margin: 2.5vw;
+    font-size: 1.5vw;
+}
+
+
+.loginPanel .email {
+    padding-top: 60px;
+    padding-bottom: 20px;
+}
+
+.loginPanel input {
+    border-radius: 10px;
+    height: 2vw;
+    font-size: 1vw;
+    background-color: #D9D9D9;
+}
+
+.loginPanel button {
+    border-radius: 10px;
+    height: 3vw;
+    font-size: 1vw;
+    background-color: #D9D9D9;
+    margin-top: 30px;
+    width: 6vw;
+}

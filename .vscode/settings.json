@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/696b46ed-8530-4885-bc86-d76cbd31698c/resourceGroups/1001Gold/providers/Microsoft.Web/sites/1001GoldService",
+    "appService.deploySubpath": "build"
+}

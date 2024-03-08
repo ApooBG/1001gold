@@ -1,0 +1,396 @@
+/* flex-direction: column;
+    justify-content: space-evenly
+    align-item: flex-start
+    flex-wrap: wrap
+    align-content: flex-start
+    gap: 1em
+
+    order: 1;
+    flex-grow: 1
+    flex-shrink: 1
+    flex: 1
+    align-slef: baseline; */
+
+#header {
+    height: 5vw;
+}
+
+.fullPage {
+    width: 75vw;
+    height: auto;
+    margin-left: 12.5vw;
+    background-color: white;
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+}
+
+.flex-item {
+    width: 100%;
+    height: auto;
+}
+
+.flex-item1, .flex-item2 {
+    width: 40%;
+    flex-basis: calc(50% - 2px);
+}
+
+.flex-item3 {
+    padding-top: 3.5vw;
+}
+
+.flex-item4 {
+    padding-top: 0.5vw;
+}
+
+/* IMAGES */
+
+.allImages {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.productPicture {
+    width: 100%;
+    height: 200px;
+    background-color: black;
+}
+
+.productPicture:hover, .productPicture:active {
+    transform: scale(1.1);
+    transition: all 0.2s;
+}
+
+.productPicture:not(:hover) {
+    transform: scale(1);
+    transition: all 0.3s;
+}
+
+.productPicture1:hover, .productPicture1:active {
+    transform: scale(1.05);
+    transition: all 0.2s;
+}
+
+.productPicture1 {
+    width: 90%;
+    background-color: #F0F0F0;
+    margin: 2vw;
+    margin-bottom: 0.5vw;
+    margin-right: 0.5vw;
+    height: 29vw;
+    filter: drop-shadow(0.2vw 0.22vw 0.22vw #b8b8b8);
+}
+
+
+
+.productPicture2, .productPicture3, .productPicture4 {
+    width: 25.5%;
+    margin: 1vw;
+    margin-left: 1.5vw;
+    height: 10vw;
+    background-color: #F0F0F0;
+}
+
+.productPicture2 {
+    margin-left: 2.15vw;
+    
+}
+
+.productPicture img {
+    height: 80%;
+    width: 80%;
+    object-fit: contain;
+    display: block;
+    margin: auto;
+    padding-top: 10%;
+}
+
+/* PRODUCT DETAILS */
+
+.productDetails {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2vw;
+}
+
+.productDetails a {
+    font-size: 1.5vw;
+    font-weight: 540;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+
+.productDetails .header a {
+    font-size: 2.7vw;
+    font-weight: 545;
+    text-transform: uppercase;
+}
+
+.productDetails hr {
+    border-top: 0.4vw solid #B69213;
+    border-radius: 40px;
+    clear: both;
+    width: 75%;
+    margin-right: 21%;
+    align-self: flex-start;
+}
+
+.productDetails .price {
+    margin-top: 1.4vw;
+    margin-left: 1vw;
+}
+
+.productDetails .price a{
+    font-size: 2.4vw;
+    color: #B69213;
+    font-weight: 600;
+}
+
+.productDetails .productInfo {
+    background-color: #F0F0F0;
+    width: 82%;
+    height: auto;
+    
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding-right: 2vw;
+    margin-top: 2.6vw;
+}
+
+.productDetails .productInfo a {
+    font-weight: 700;
+}
+
+
+.productDetails .productInfo .flex-item {
+    margin: 1vw;
+    margin-right: 2vw;
+    margin-left: 1.2vw;
+}
+
+.productDetails .productInfo .addInfo {
+    margin-top: 1.1vw;
+}
+
+.productDetails .productInfo .productCode{
+    margin-bottom: 0vw;
+}
+
+.productDetails .productInfo .inStock{
+    margin-top: 0vw;
+    text-align: right;
+}
+
+.productDetails .productEngraving {
+    background-color: #F0F0F0;
+    width: 83%;
+    height: auto;
+    
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin-top: 2.6vw;
+}
+
+.productDetails .productEngraving a {
+    font-weight: 700;
+}
+
+
+.productDetails .productEngraving .flex-item {
+    margin: 0.3vw;
+    margin-right: 2vw;
+    margin-left: 2vw;
+}
+
+.productDetails .productEngraving .header{
+    margin-left: 1.2vw;
+    margin-top: 1.2vw;
+}
+
+.productDetails .productEngraving .header a{
+    font-size: 1.5vw;
+    text-transform: none;
+}
+
+.productDetails .productEngraving .engravingChoice {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5vw;
+}
+
+.productDetails .productEngraving .engravingChoice .engravingBack {
+    background-color: white;
+    width: 1.3vw;
+    height: 1.3vw;
+}
+
+.productDetails .productEngraving .engravingChoice .engravingTrue {
+    background-color: #FFC700;
+    width: 0.8vw;
+    height: 0.8vw;
+    margin: auto;
+    margin-top: 19%;
+}
+
+.productEngraving .engravingChoice .wantEngravingText {
+    width: 20vw;
+}
+
+.productEngraving .wantEngravingText a{
+    font-size: 1vw;
+}
+
+.productEngraving input {
+    flex-basis: 38%;
+    margin-left: 6.5%;
+    font-size: 0.8vw;
+}
+
+.productEngraving .fonts {
+    display: flex;
+    width: 90%;
+    gap: 0.6vw;
+    margin-right: 2vw;
+    padding-bottom: 1vw;
+}
+
+
+.productEngraving .fonts .font{
+    background-color: white;
+    height: 100%;
+    border: 0.3vw solid white;
+}
+
+.productEngraving .fonts .font a{
+    font-size: 0.8vw;
+}
+
+.productEngraving .fonts .fontText {
+    height: 20px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6)
+}
+
+.productEngraving .fonts .fontText a{
+    font-size: 0.6vw;
+    word-wrap: break-word;
+    width: 20px;
+}
+
+.productDetails .buyButton {
+    width: 40%;
+    height: 5vw;
+    background-color: #2E0002;
+    color: #FFC700;
+    text-align: center;
+    margin-top: 1.5vw;
+    margin-left: 1.5vw;
+    cursor: pointer;
+}
+
+.productDetails .buyButton:hover {
+    background-color: #2e0002d9; 
+}
+
+.productDetails .buyButton a {
+    font-size: 4vw;
+    display: block;
+}
+
+
+/* REVIEWS */
+
+.commentSection {
+    background-color: #b8b8b8;
+    width: 60%;
+    height: 16vw;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vw;
+
+    overflow:auto;
+    border: 1vw solid #b8b8b8;
+    border-right: 0.5vw solid #b8b8b8;
+}
+
+.comment {
+    display: flex;
+    gap: 0.6vw;
+}
+
+.comment a {
+    font-size: 1vw;
+    font-weight: 600;
+}
+
+.comment .reviewUsername a{
+    font-size: 1.13vw;
+}
+
+.comment .text {
+    padding-bottom: 0.4vw;
+    padding-top: 0.1vw;   
+}
+
+.comment .text:has(a:empty)  {
+    padding-bottom: 0vw;
+}
+
+.comment img {
+    height: auto;
+    width: 1.6vw;
+    object-fit: contain;
+}
+
+
+/* ADD REVIEW */
+
+.addReviewBackground {
+    width: 60%;
+    height: 4vw;
+    padding: 0.78vw;
+    background-color: #b8b8b8;
+
+    margin-bottom: 2vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1.2vw;
+}
+
+.addReviewBackground .reviewText{
+    flex-grow: 1;
+    text-align: top;
+}
+
+.addReviewBackground .reviewText textarea{
+    width: 100%;
+    font-size: 0.9vw;
+    height: 3vw;
+    resize: none;
+}
+
+.addReviewBackground .reviewStars img{
+    height: auto;
+    width: 1.6vw;
+    object-fit: contain;
+}
+
+.addReviewBackground .sendButton {
+    width: 7.5vw;
+    background-color: #2E0002;
+
+    margin-left: auto;
+    text-align: center;
+    padding: 0.5vw;
+}
+
+.addReviewBackground .sendButton a {
+    color: #FFC700;
+    font-size: 1.3vw;
+}

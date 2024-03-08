@@ -1,0 +1,358 @@
+.fullPage {
+    display: flex;
+    flex-direction: column;
+    margin-left: 12.9%;
+    width: 75%;
+    background-color: #D9D9D9;
+}
+
+.fullPage > div {
+    padding: 4vw;
+    padding-bottom: 0;
+    padding-top: 0;
+
+}
+
+.orderHead {
+    height: auto;
+    width: 100%;
+    display: flex;
+    margin-bottom: 2.5vw;
+    margin-top: 4vw;
+}
+
+.orderHead a {
+    font-size: 1.3vw;
+}
+
+.orderHead .left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3vw;
+    border-bottom: solid #B69213 0.3vw;
+}
+
+.orderHead .left .orderNumber a{
+    font-size: 2.2vw;
+    font-weight: 600;
+}
+
+.orderHead .right {
+    display: flex;
+    flex-direction: column;
+    float: right;
+    text-align: right;
+    flex-grow: 1;
+    gap: 1.3vw;
+    padding-bottom: 2vw;
+    border-bottom: solid #B69213 0.3vw;
+
+}
+
+.orderHead .right .orderStaus a {
+    font-size: 2.2vw;
+    color: green;
+    font-weight: 600;
+}
+
+
+/* PRODUCTS */
+
+.products {
+    width: 100%;
+}
+
+.product {
+    width: 100%;
+    background-color: #E6E6E6;
+    display: flex;
+    padding-right: 1.5vw;
+    padding-bottom: 0.5vw;
+    padding-top: 0.5vw;
+    padding-left: 1.5vw;
+    margin-bottom: 1vw;
+}
+
+.product a {
+    font-size: 1.3vw;
+}
+
+.product .productImage {
+    width: 11.9vw;
+    height: 8vw;
+    margin-right: 3vw;
+}
+
+.product .productImage img {
+    max-height: 100%;
+    max-width: auto;
+    display: block; /* Needed to apply margins to an image */
+    margin-bottom: auto;
+    object-fit: contain;
+}
+
+.product .productInfo {
+    padding-left: 2vw;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.3vw
+}
+
+.product .productInfo .name {
+    padding-top: 0.5vw;
+}
+.product .productInfo .name a{
+    font-size: 1.5vw;
+    text-transform: uppercase;
+    color: #B69213;
+    font-weight: 600;
+}
+
+.product .productPrice {
+    text-align: right;
+}
+
+.product .productPrice .price a {
+    font-size: 1.5vw;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.692);
+}
+
+.product .productPrice .quantity  {
+    padding-top: 0.6vw;
+}
+
+.product .productPrice .quantity a {
+    font-size: 1.2vw;
+}
+
+.product .productInfo .grafit {
+    flex-grow: 1;
+    display: block;
+    padding-top: 0.45vw;
+}
+
+
+.product .productPrice {
+    align-self: center;
+    float: right;
+}
+
+
+/* PAYMENT */
+
+.paymentInformation {
+    width: 90%;
+    height: 15vw;
+    margin: 2vw;
+    margin-left: 5%;
+    display: flex;
+    border-top: solid #B69213 0.3vw;
+    border-bottom: solid #B69213 0.3vw;
+}
+
+.paymentInformation .firstChild {
+    width: 100%;
+    height: 10vw;
+    margin-top: 2vw;
+    display: flex;
+    flex-direction: row;
+}
+
+.paymentInformation .firstChild .left {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+}
+
+.paymentInformation .firstChild .left .paymentMethod{
+    height: 60%;
+    width: 100%;
+    background-color: #E6E6E6;
+}
+
+.paymentInformation .firstChild .left .phoneNumber{
+    height: 40%;
+    width: 100%;
+    background-color: #E6E6E6;
+}
+
+.paymentInformation .firstChild .right {
+    background-color: #E6E6E6;
+    width: auto;
+    flex-grow: 1;
+    margin-left: 20%;
+    height: 100%;
+
+}
+
+.paymentInformation .firstChild .right .address {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5vw;
+    gap: 0.3vw;
+    font-size: 1.1vw;
+    position: relative;
+}
+
+
+.paymentInformation .cashPayment {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    gap: .5vw;
+    padding-left: 1.5vw;
+    height: 3.5vw;
+}
+
+.paymentInformation .cashPayment img {
+    width: auto;
+    height: 60%;
+}
+
+.paymentInformation .cashPayment a {
+    font-size: 1.1vw;
+}
+
+.paymentInformation .phoneNumber
+{
+    display: flex;
+    align-items: center; /* Align vertical */
+    padding-left: 1.5vw;
+    gap: .5vw;
+}
+
+.paymentInformation .phoneNumber img {
+    width: auto;
+    height: 60%;
+}
+
+.paymentInformation .phoneNumber a {
+    font-size: 1.1vw;
+    font-weight: 600;
+}
+
+/* ORDER SUMMARY */
+
+.orderSummaryBack {
+    display: flex;
+}
+
+.orderSummaryBack .orderHelp {
+    width: 25%;
+    margin-right: 15%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6vw;
+    color: rgba(0, 0, 0, 0.588);
+    text-align: center;
+    font-weight: 600;
+    font-size: 1vw
+
+
+}
+.orderSummary {
+    width: 50%;
+    height: auto;
+    background-color: #c7c7c7;
+    margin: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-grow: 1;
+}
+
+.orderSummary a {
+    font-size: 1.5vw;
+    padding-right: 2vw;
+    padding-left: 4vw;
+}
+
+.orderSummary > div {
+    padding-bottom: 1.5vw;
+
+}
+
+.orderSummary .summaryText {
+    flex-basis: calc(100% - 2px);
+    padding-top: 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+}
+
+.orderSummary .summaryText a {
+    font-size: 1.9vw;
+}
+.orderSummary .mejdSumaText {
+    flex-basis: calc(50% - 2px);
+}
+
+.orderSummary .mejdSumaPrice {
+    flex-basis: calc(50% - 2px);
+    text-align: right;
+}
+
+.orderSummary .discountText {
+    flex-basis: calc(50% - 2px);
+}
+
+.orderSummary .discountPrice {
+    flex-basis: calc(50% - 2px);
+    text-align: right;
+}
+
+.orderSummary .grafitText {
+    flex-basis: calc(50% - 2px);
+}
+
+.orderSummary .grafitPrice {
+    flex-basis: calc(50% - 2px);
+    text-align: right;
+}
+
+.orderSummary .deliveryText {
+    flex-basis: calc(50% - 2px);
+}
+
+.orderSummary .deliveryPrice {
+    flex-basis: calc(50% - 2px);
+    text-align: right;
+}
+
+.orderSummary .line {
+    width: 100%;
+    height: auto;
+}
+
+.orderSummary .line hr{
+    border-top: 0.2vw dashed #B69213;
+    clear:both;
+    width: 90%; 
+    margin-left: 5%;              
+}
+
+.orderSummary .totalText {
+    flex-basis: calc(50% - 2px);
+}
+
+.orderSummary .totalText a{
+    font-size: 1.8vw;
+    font-weight: 700;
+}
+
+.orderSummary .totalPrice {
+    flex-basis: calc(50% - 2px);
+    text-align: right;
+}
+
+.orderSummary .totalPrice a{
+    font-size: 1.8vw;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+

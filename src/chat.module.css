@@ -1,0 +1,155 @@
+.hiddenChat {
+    background-color: #2E0002;
+    width: 15%;
+    height: 10vw;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+
+
+.chat {
+    background-color: #2E0002;
+    width: 22%;
+    height: 30vw;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    padding: 0.5vw;
+    margin-bottom: 0.3vw;
+    margin-right: 0.3vw;
+    padding-top: 0vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat .minimize {
+    height: 1vw;
+    background-color: rgb(0, 0, 0);
+    width: calc(100% + 1vw);
+    position: relative;
+    left: -0.5vw;
+}
+
+.chat .minimize:hover {
+    background-color: rgba(27, 26, 26, 0.829);
+}
+
+.chat .header {
+    display: flex;
+    align-items: center;
+    gap: 3%;
+}
+
+.chat .header .image {
+    width: 40%;
+    height: 100%;
+    padding: 0.4vw;
+}
+
+.chat .header .image img {
+    object-fit: cover;
+    display: block;
+    margin: auto;
+    height: auto;
+    width: 100%;
+    
+}
+
+.chat .header h2 {
+    color: #FFC700;
+    font-size: 1.3vw;
+}
+
+.chat .header a {
+    color: white;
+    font-size: 1vw;
+}
+
+
+.chat .messages {
+    width: 100%;
+    height: 70%;
+    background-color: white;
+    padding: 0.4vw;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vw;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.chat .messages .staffMessage {
+    height: auto;
+    width: auto;
+    max-width: 80%;
+    padding: 1vw;
+    margin-right: auto; 
+    margin-left: 0;
+    text-align: left;
+    background-color: #2e0002f1;
+    color: white;
+}
+
+.chat .messages .userMessage {
+    height: auto;
+    width: auto;
+    max-width: 80%;
+    padding: 1vw;
+    margin-left: auto; 
+    margin-right: 0;
+    text-align: right;
+    background-color: #D9D9D9;
+}
+
+.chat .sendMessageBack {
+    background-color: white;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.chat .sendMessage {
+    width: 90%;
+    height: 90%;
+    margin-left: 5%;
+    margin-top: 1.4%;
+    background-color: white;
+    
+    border-radius: 20px;
+    border: solid black 0.13vw;
+    display: flex;
+    align-items: center;
+    gap: 0.3vw;
+    padding: 0.1vw;
+}
+
+
+/* Updated to use textarea for multi-line input */
+.chat .sendMessage textarea {
+    flex-grow: 1;
+    height: 100%; /* Adjust as needed */
+    border-radius: 25px;
+    border: none;
+    outline: none; /* Removes default focus outline */
+    resize: none; /* Prevents resizing */
+    overflow-y: auto; /* Allows scrolling */
+    padding-top: 10px; /* Adjust padding to control where the text starts */
+    padding-left: 10px; /* Adjust for horizontal padding */
+    font-size: 1rem; /* Adjust as needed */
+}
+
+/* Updated to use :focus for removing border on focus */
+.chat .sendMessage textarea:focus {
+    outline: none; /* Removes default focus outline */
+}
+
+.chat .sendMessage img {
+    object-fit: cover;
+    display: block;
+    width: auto;
+    height: 50%;
+    margin-right: 0.23vw
+}
