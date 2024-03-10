@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import styles from './main.module.css';
-import shopImage from './images/ShopImage.png';
+import shopImage from './images/logo.jpg';
 import searchIcon from './images/SearchIcon.png';
 import cartImage from './images/cart.png';
 import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 import { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import Header from './header';
+import Chat from './chat.js';
 
 
 const products = [];
@@ -95,12 +96,17 @@ function Products({ products, addToCart, userid }) {
 
     const items = products.slice(firstItemPage, lastItemPage).map((product, index) => (
         
-        <div className={styles['grid-item']} >
-            <Link to={`/product/${product.id}`} key={product.id} style={{ color: 'black' }}>
-                <div className={styles.picture}>
-                    <img className={styles.productPicture} src={'data:image/jpeg;base64,' + product.mainImageData} />
-                </div> 
-            </Link>
+        <div className={styles['grid-item']} key={product.id}>
+        <Link to={`/product/${product.id}`} style={{ color: 'black' }}>
+          <div className={styles.picture}>
+            {product.quantity < 1 && (
+              <div className={styles.outOfStockOverlay}>
+                Няма в наличност
+              </div>
+            )}
+            <img className={styles.productPicture} src={'data:image/jpeg;base64,' + product.mainImageData} />
+          </div>
+        </Link>
             <div className={styles.title}><a>{product.name} {product.weight}гр</a></div>
             <div className={styles.price}>
                 <a>{new Intl.NumberFormat('en-US', {
@@ -110,7 +116,7 @@ function Products({ products, addToCart, userid }) {
                 }).format(product.price)} лв.</a>
             </div>
             <div className={styles.cartImage}>
-                <img onClick={() => addToCart(product.name, cartID, product.id)} className={styles.cart} src={cartImage} />
+                {product.quantity >= 1 && (<img onClick={() => addToCart(product.name, cartID, product.id)} className={styles.cart} src={cartImage} />)}
             </div>
         </div>
     ));
@@ -179,13 +185,14 @@ function Footer() {
 }
 
 
-function App({userid}) {
+function App({userid, isAdmin}) {
     const [products, setProducts] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, changeCurrentPage] = useState(1);
     const [showAddToCartMessage, setShowAddToCartMessage] = useState(false);
     const [productName, setProductName] = useState([]);
+    const [cartMessages, setCartMessages] = useState([]);
 
     useEffect(() => {
         const url = "http://localhost:5104/Product/GetProducts";
@@ -198,33 +205,49 @@ function App({userid}) {
 
     // Function to handle adding to cart
     const addToCart = (name, cartID, productID) => {
-        setShowAddToCartMessage(true);
-        setProductName(productName => [...productName, name]);
-        // Hide the message after some time
-        setTimeout(() => deleteElementFromArr(name), 3000);
+        // Create a message object with a unique id
         
-        // Prepare the URL with query parameters
         const url = new URL('http://localhost:5104/Cart/AddProductInCart');
         url.searchParams.append('cartID', cartID);
         url.searchParams.append('productID', productID);
     
-        // Perform the POST request
+        // Perform the POST request as you have it...
         fetch(url, { method: 'POST' })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Something went wrong on API server!');
-                }
-            })
-            .then(response => {
-                console.log(response); // Handle the response data
-            })
-            .catch(error => {
-                console.error(error); // Handle the error
-            });
+        .then(response => {
+            if (response.ok) {
+                const message = {
+                    id: Date.now(), // Unique identifier
+                    name: name
+                };
+            
+                // Add the new message object to the array
+                setCartMessages(prevMessages => [...prevMessages, message]);
+            
+                // Set a timeout to remove this message after 5 seconds
+                setTimeout(() => {
+                    setCartMessages(prevMessages => prevMessages.filter(msg => msg.id !== message.id));
+                }, 5000);
+                return response.json();
+            } else {
+                alert("Няма достатъчно количество!");
+                throw new Error('Something went wrong on API server!');
+            }
+        })
+        .then(response => {
+            console.log(response); // Handle the response data
+            alert("Няма връзка със сървъра!");
+        })
+        .catch(error => {
+            console.error(error); // Handle the error
+        });
     };
-
+    
+    // Render the messages on the top right of the screen
+    const cartMessageElements = cartMessages.map((message) => (
+        <div key={message.id} className={styles.addToCart}>
+            <a>Успешно добавихте <span className={styles.productText}>{message.name}</span> в количката.</a>
+        </div>
+    ));
     const deleteElementFromArr = (dsa) => {
         setProductName(productName.slice(0, 1))
     };
@@ -241,16 +264,20 @@ function App({userid}) {
         bake_cookie("CurrentPage", currentPage);
 
         return (
-            <div>
-                <Header />
+            <div className={styles.fullPage}>
+                <Header isAdmin={isAdmin}/>
                 <Image />
                 <FilterMenu products={products} setFilteredProducts={setFilteredProducts} />
                 <PriceRange />
+                <div className={styles.NewProductsToCart}>
+                    {cartMessageElements}
+                </div>
                 <PageNumbering products={filteredProducts.length ? filteredProducts : products} changeCurrentPage={changeCurrentPage} />
                 <div className={styles.NewProductsToCart}> {arrayOfAddedProducts} </div>
                 <Products products={filteredProducts.length ? filteredProducts : products} addToCart={addToCart} userid={userid} />
                 <PageNumbering products={filteredProducts.length ? filteredProducts : products} changeCurrentPage={changeCurrentPage}/>
                 <Footer />
+                <Chat userid={userid} />
             </div>
         );
     }

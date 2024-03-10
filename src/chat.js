@@ -7,17 +7,40 @@ import sendIcon from './images/sendIcon.png';
 
 
 function App({userid}) {
-    userid = 7;
-    console.log(userid);
     const [displayChat, setDisplayChat] = useState(false);
     const [messages, setMessages] = useState([]);
     const [conversationID, setConversationID] = useState(0);
     const [newMessageContent, setNewMessageContent] = useState('');
     const messagesEndRef = useRef(null);
+    console.log("CART" + userid);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
+
+    const createConversation = async () => {
+        try {
+          const response = await fetch(`http://localhost:5104/Chat/CreateConversation?userID=${userid}`, {
+            method: 'POST', // Assuming POST is the correct method for this endpoint
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            // If the body is needed, include it here as JSON. Omit if not necessary.
+          });
+      
+          if (!response.ok) {
+            throw new Error('Network response was not ok when trying to create a conversation');
+          }
+      
+          const newConversationData = await response.json();
+          setConversationID(newConversationData.id); // Assuming the response includes the ID of the new conversation
+          
+          // Now that the conversation is created, you can fetch messages for it
+          fetchMessages();
+        } catch (error) {
+          console.error('Error creating conversation:', error);
+        }
+      };
 
     const changeChatVisibility = () => {
         setDisplayChat(!displayChat);
@@ -131,7 +154,10 @@ function App({userid}) {
 
     else {
         return (
-            <div onClick={changeChatVisibility} className={styles.hiddenChat}></div>
+            <div onClick={() => {
+                changeChatVisibility();
+                createConversation(); // Call createConversation when the hiddenChat div is clicked
+              }} className={styles.hiddenChat}></div>
         )
     }
     

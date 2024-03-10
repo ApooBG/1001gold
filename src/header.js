@@ -4,19 +4,19 @@ import logo from './images/logo.jpg';
 import { Link } from 'react-router-dom';
 
 
-function Header() {
+function Header({isAdmin}) {
     return (
-        <div id="header">
             <div className="headerBackground">
                 <img className="logo" src={logo} />
                 <ul className='navigationMenu'>
+                {isAdmin && <Link to={`/admin`}><li className="cartButton"><a style={{color:"gold", fontWeight:"600"}}>АДМИН ПАНЕЛ</a></li></Link>}
+
                 <Link to={`/`}><li><a>НАЧАЛО</a></li></Link>
                 <Link to={`/`}><li><a>ЗА НАС</a></li></Link>
                 <Link to={`/`}><li><a>ПРОФИЛ</a></li></Link>
                 <Link to={`/cart`}><li className="cartButton"><a>КОЛИЧКА</a></li></Link>
                 </ul>
             </div>
-        </div>
     )
 }
 

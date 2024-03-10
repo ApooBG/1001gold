@@ -10,11 +10,12 @@ import ringImage from './images/ring.png';
 import necklaceImage from './images/necklace.png';
 import starImage from './images/star.png';
 import yellowStarImage from './images/yellowStar.png';
+import Chat from './chat.js';
 
 
 
-function ProductImages(product) {
-    const additionalImages = product.product.additionalImages;
+function ProductImages({product}) {
+    const additionalImages = product.additionalImages;
     let renderAdditionalImage = [];
     for (let i = 0; i < additionalImages.length; i++)
     {
@@ -26,15 +27,15 @@ function ProductImages(product) {
     return (
         <div className={`${styles['flex-item']} ${styles['flex-item1']}`}>
             <div className={styles.allImages}>
-                <div className={`${styles['productPicture']} ${styles['productPicture1']}`}><img src={'data:image/jpeg;base64,' + product.product.mainImageData} /></div>
+                <div className={`${styles['productPicture']} ${styles['productPicture1']}`}><img src={'data:image/jpeg;base64,' + product.mainImageData} /></div>
                 {renderAdditionalImage}
             </div>
         </div>
     )
 }
 
-function GetCartID(userID, setCartID) {
-    const url = `http://localhost:5104/Cart/GetCart/${userID}`;
+function GetCartID({userID, setCartID}) {
+    const url = `http://localhost:5104/Cart/GetCartByUser/${userID}`;
     fetch(url)
         .then(response => {
             if (response.ok) {
@@ -54,13 +55,15 @@ function GetCartID(userID, setCartID) {
 }
 
 
-function ProductDetails(product) {
+function ProductDetails({product, userID}) {
     const [cartID, setCartID] = useState(null);
 
-    if (cartID <= 0)
-    {
-        GetCartID(4, setCartID);
-    }
+    useEffect(() => {
+        if (userID) {
+            console.log("Getting Cart ID for userID:", userID);
+            GetCartID({ userID, setCartID });
+        }
+    }, [userID]); // Only re-run the effect if userID changes
 
     const addToCart = (cartID, productID) => {
         // Prepare the URL with query parameters
@@ -87,20 +90,20 @@ function ProductDetails(product) {
     return (
         <div className={`${styles['flex-item']} ${styles['flex-item2']}`}>
         <div className={styles.productDetails}>
-            <div className={styles.header}><a>{product.product.name}</a></div>
+            <div className={styles.header}><a>{product.name}</a></div>
             <hr />
             <div className={styles.price}>
                 <a>{new Intl.NumberFormat('en-US', {
                     style: 'decimal',
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                }).format(product.product.price)} лв.</a>
+                }).format(product.price)} лв.</a>
             </div>
             <div className={styles.productInfo}>
-                <div className={`${styles.addInfo} ${styles['flex-item']}`}><a>{product.product.description}.</a></div>
-                <div className={`${styles.weight} ${styles['flex-item']}`}><a>Тегло: {product.product.weight} гр.</a></div>
-                <div className={`${styles.productCode} ${styles['flex-item']}`}><a>Код на продукта: {product.product.id}</a></div>
-                <div className={`${styles.inStock} ${styles['flex-item']}`}>{ product.product.quantity > 0 ? <a style={{color: "Green"}}>в наличност</a> : <a style={{color: "Red"}}>няма в наличност</a> }</div>
+                <div className={`${styles.addInfo} ${styles['flex-item']}`}><a>{product.description}.</a></div>
+                <div className={`${styles.weight} ${styles['flex-item']}`}><a>Тегло: {product.weight} гр.</a></div>
+                <div className={`${styles.productCode} ${styles['flex-item']}`}><a>Код на продукта: {product.id}</a></div>
+                <div className={`${styles.inStock} ${styles['flex-item']}`}>{ product.quantity > 0 ? <a style={{color: "Green"}}>в наличност</a> : <a style={{color: "Red"}}>няма в наличност</a> }</div>
             </div>
 
             {/* <div className={styles.productEngraving}>
@@ -120,7 +123,7 @@ function ProductDetails(product) {
                 </div>
             </div> */}
 
-            <div onClick={() => addToCart(cartID, product.product.id)} className={styles.buyButton}>
+            <div onClick={() => addToCart(cartID, product.id)} className={styles.buyButton}>
                 <a>КУПИ</a>
             </div>
             </div>
@@ -128,7 +131,7 @@ function ProductDetails(product) {
     )
 }
 
-function Comments(product) {
+function Comments({product}) {
 
     function GetStars(stars) 
     {
@@ -152,14 +155,14 @@ function Comments(product) {
     }
     
     let commentsList = [];
-    for (let i = 0; i < product.product.comments.length; i++)
+    for (let i = 0; i < product.comments.length; i++)
     {
         commentsList.push(<div className={styles.comment}>
-            <div className={styles.reviewUsername}><a>{product.product.comments[i].username}:</a></div>
+            <div className={styles.reviewUsername}><a>{product.comments[i].username}:</a></div>
             <div className={styles.reviewText}>
-                <div className={styles.text}><a>{product.product.comments[i].text}</a></div>
+                <div className={styles.text}><a>{product.comments[i].text}</a></div>
                 <div className={styles.reviewStars}>
-                    <GetStars stars={product.product.comments[i].gradeReview}/>
+                    <GetStars stars={product.comments[i].gradeReview}/>
                 </div>
             </div>
         </div>)
@@ -248,10 +251,11 @@ function AddReview({product, setLoading}) {
     );
 }
 
-function App() {
+function App({userid}) {
     let productID = window.location.pathname.split('/')[window.location.pathname.split('/').length-1];
     var [CurrentProduct, setProduct] = useState([]);
     var [loading, setLoading] = useState(true);
+    console.log(userid);
     useEffect(() => {
         const url = "http://localhost:5104/Product/FindProduct/" + productID;
         fetch(url)
@@ -269,15 +273,16 @@ function App() {
 
     if (!loading && CurrentProduct.id > 0)
     {
+        console.log("PRODUCT " + userid)
         return (
-            <div className={styles.productPage}>
-                    <Header />
             <div className={styles.fullPage}>
+            <Header />
+
                     <ProductImages product={CurrentProduct} />
-                    <ProductDetails product={CurrentProduct} />
+                    <ProductDetails product={CurrentProduct} userID={userid} />
                     <Comments product={CurrentProduct} />
                     <AddReview product={CurrentProduct} setLoading={setLoading} />
-            </div>
+                    <Chat userid={userid} />
             </div>
         );
     }

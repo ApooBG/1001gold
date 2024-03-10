@@ -9,7 +9,7 @@ input {
 
 .page {
     width: 100vw;
-    height: 100vw;
+    height: auto;
     display: flex;
     padding: 2vw;
     padding-top: 0vw;
@@ -38,6 +38,8 @@ input {
     flex-direction: column;
     gap: 3vw;
     padding-top: 3vw;
+    height: auto;
+    padding-bottom: 16vw;
 }
 
 .leftMenu .categories .flexItem {
@@ -94,12 +96,13 @@ input {
 .displayProducts {
     display: flex;
     flex-direction: column;
+    height: 45vw;
 }
 
 
 .productTable {
     overflow-y: auto; /* Enables vertical scrolling */
-    height: 36%; /* Ensure this is not more than its parent container */
+    height: 30vw; /* Ensure this is not more than its parent container */
     margin-top: 40px;
   }
   
@@ -140,6 +143,7 @@ tbody tr {
     padding: 1.6vw;
     padding-bottom: 0vw;
     padding-top: 0vw;
+    height: 100vw;
   }
 
   .productFilters {
@@ -211,7 +215,8 @@ tbody tr {
   .chat {
     background-color: black;
     width: 100%;
-    height: auto;
+    height: 60%;
+    max-height: 65vw;
     display: flex;
     margin-left: 1vw;
     margin-right: 1vw;
@@ -219,13 +224,15 @@ tbody tr {
   }
 
   .conversations {
-    height: auto;
     width: 20%;
+    height: 100%;
     background-color: #9a9a9a82;
     padding: 1vw;
     display: flex;
     flex-direction: column;
     gap: 1vw;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .conversations .conversation {
@@ -243,7 +250,85 @@ tbody tr {
   }
 
   .messages {
-    height: auto;
     flex-grow: 1;
     background-color: #D9D9D9;
+    padding: 2vw;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vw;
+
+    overflow-x: hidden;
+    overflow-y: auto;
   }
+  
+  .messages .userMessage {
+    height: auto;
+    width: auto;
+    max-width: 80%;
+    padding: 1vw;
+    margin-right: auto; 
+    margin-left: 0;
+    text-align: left;
+    background-color: #2e0002f1;
+    color: white;
+  }
+
+  .messages .adminMessage {
+    height: auto;
+    width: auto;
+    max-width: 80%;
+    padding: 1vw;
+    margin-left: auto; 
+    margin-right: 0;
+    text-align: right;
+    background-color: #f2f2f2;
+  }
+
+
+  .sendMessage {
+    width: 70%;
+    height: 5vw;
+    background-color: white;
+    border: solid black 0.13vw;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 0.3vw;
+    padding: 0.1vw;
+    margin-top: 0.7vw;
+    margin-left: 27%;
+  }
+
+.sendMessage textarea {
+    flex-grow: 1;
+    height: 100%; /* Adjust as needed */
+    border-radius: 25px;
+    border: none;
+    outline: none; /* Removes default focus outline */
+    resize: none; /* Prevents resizing */
+    overflow-y: auto; /* Allows scrolling */
+    padding-top: 10px; /* Adjust padding to control where the text starts */
+    padding-left: 10px; /* Adjust for horizontal padding */
+    font-size: 1rem; /* Adjust as needed */
+}
+
+/* Updated to use :focus for removing border on focus */
+.sendMessage textarea:focus {
+    outline: none; /* Removes default focus outline */
+}
+
+.sendMessage img {
+    object-fit: cover;
+    display: block;
+    width: auto;
+    height: 50%;
+    margin-right: 0.23vw
+}
+
+.fullChat {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  padding: 0;
+  margin: 0;
+}

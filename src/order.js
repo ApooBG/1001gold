@@ -5,54 +5,106 @@ import styles from './order.module.css';
 import earringImage from './images/earrings.png'
 import cashPayment from './images/cashPayLogo.png'
 import phoneNumber from './images/phoneIcon.png'
+import Chat from './chat.js'
 
 
-function OrderHead() {
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const timeHours = date.getHours().toString().padStart(2, '0');
+    const timeMinutes = date.getMinutes().toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // January is 0!
+    const year = date.getFullYear();
+    return `${timeHours}:${timeMinutes} ${day}-${month}-${year}`;
+};
+
+const calculateArrivalDate = (dateString) => {
+    const date = new Date(dateString);
+    date.setDate(date.getDate() + 2); // Add 2 days to the current date
+    return formatDate(date.toISOString()); // Reuse formatDate to get the desired output
+};
+
+
+function OrderHead({order}) {
+    const formattedOrderDate = order.dateOfOrder ? formatDate(order.dateOfOrder) : 'Изчакване...';
+    // Use the calculateArrivalDate function to get the expected arrival date
+    const expectedArrivalDate = order.dateOfOrder ? calculateArrivalDate(order.dateOfOrder) : 'Изчакване...';
+    function GetStatus() {
+        const status = order.status;
+        if (status == 0)
+        {
+            return (
+                <a style={{color: "darkorange"}}>ПОЛУЧЕНА</a>
+            )
+        }
+
+        if (status == 1)
+        {
+            return (
+                <a style={{color: "green"}}>ИЗПРАТЕНА</a>
+            )
+        }
+
+        if (status == 2)
+        {
+            return (
+                <a style={{color: "darkgreen"}}>ДОСТАВЕНА</a>
+            )
+        }
+
+        else 
+        {
+            return (
+                <a style={{color: "red"}}>ОТКАЗАНА</a>
+            )
+        }
+    }
     return (
         <div className={styles.orderHead}>
             <div className={styles.left}>
-                <div className={styles.orderNumber}><a>Номер на поръчка: 234567</a></div>
-                <div><a>Дата на поръчка: 12:25 30/01/2024</a></div>
+                <div className={styles.orderNumber}><a>Номер на поръчка: {order.id}</a></div>
+                <div><a>Дата на поръчка: {formattedOrderDate}</a></div>
             </div>
             <div className={styles.right}>
-                <div className={styles.orderStaus}><a>ДОСТАВЕНА</a></div>
-                <div><a>Очаквана дата на пристигане: 02/02/2024</a></div>
+                <div className={styles.orderStaus}>{GetStatus()}</div>
+                <div><a>Очаквана дата на пристигане: {expectedArrivalDate}</a></div>
             </div>
         </div>
     )
 }
 
-function OrderProducts() {
-    var products = [];
-    for (let i = 0; i <= 4; i++)
-    {
-        products.push(
-            <div className={styles.product}>
-                <div className={styles.productImage}>
-                    <img src={earringImage} />
-                </div>
-                <div className={styles.productInfo}>
-                    <div className={styles.name}><a>Дамски златни обеци</a></div>
-                    <div className={styles.weight}><a>12.34 гр.</a></div>
-                    <div className={styles.grafit}><a>Гравиране + (18.00 лв.)</a></div>
-                </div>
-                <div className={styles.productPrice}>
-                    <div className={styles.price}><a>10,250.00 лв.</a></div>
-                    <div><a style={{fontSize: 0.9 + "vw"}}>с включено ДДС</a></div>
-                    <div className={styles.quantity}><a>Количество: 1</a></div>
-
-                </div>
-            </div>
-        )
-    }
-    return (
-        <div className={styles.products}>
-            {products}
+function OrderProducts({ productsList }) {
+    // Ensure productsList is an array to prevent runtime errors
+    if (!Array.isArray(productsList)) return null;
+    const productElements = productsList.map((product, index) => (
+      <div key={index} className={styles.product}> {/* Make sure to include a unique key for each child */}
+        <div className={styles.productImage}>
+         <img src={'data:image/jpeg;base64,' + product.productDetails.mainImageData} alt={product.productDetails.name} />
         </div>
+        <div className={styles.productInfo}>
+          <div className={styles.name}><a>{product.productDetails.name}</a></div>
+          <div className={styles.weight}><a>{product.productDetails.weight} гр.</a></div>
+          {/* Uncomment if engraving is to be included */}
+          {/* <div className={styles.grafit}><a>Гравиране + (18.00 лв.)</a></div> */}
+        </div>
+        <div className={styles.productPrice}>
+          <div className={styles.price}> <a>{new Intl.NumberFormat('en-US', {
+                    style: 'decimal',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                }).format(product.productDetails.price)} лв.</a></div>
+          <div><a style={{fontSize: "0.9vw"}}>с включено ДДС</a></div>
+          <div className={styles.quantity}><a>Количество: {product.productDetails.quantity}</a></div>
+        </div>
+      </div>
+    ));
+  
+    return    (     
+        <div className={styles.products}>{productElements}</div>
     )
-}
+  }
 
-function PaymentInformation() {
+function PaymentInformation({order}) {
     return (
         <div className={styles.paymentInformation}>
             <div className={styles.firstChild}> 
@@ -66,15 +118,15 @@ function PaymentInformation() {
                     </div>
                     <div className={styles.phoneNumber}>
                         <img src={phoneNumber} /> 
-                        <a>+359 89 486 4780</a>
+                        <a>{order.phoneNumber}</a>
                     </div>
 
                 </div>
                 <div className={styles.right}>
                     <div className={styles.address}>
                         <div><a style={{fontSize: "1.4vw", fontWeight:"600"}}>ДОСТАВКА</a></div>
-                        <div><a style={{color: "rgba(0, 0, 0, 0.75)"}}>Адрес:</a><a> гр. Варна, ул. Черни връх №17, ет. 2, ап.3</a></div>
-                        <div style={{alignSelf: "flex-end", position:"absolute", bottom:"-2vw"}}><a>Метод на доставка:</a> <a style={{fontWeight:"600"}}> Еконт</a></div>
+                        <div><a style={{color: "rgba(0, 0, 0, 0.75)"}}>Адрес:</a><a> гр. {order.address.split(" ")[0]}, ул. {order.address.split(" ")[1]} {order.address.split(" ")[2]}</a></div>
+                        <div style={{alignSelf: "flex-end", position:"absolute", bottom:"-2vw"}}><a>Метод на доставка:</a> <a style={{fontWeight:"600"}}> {order.deliveryMethod}</a></div>
                     </div>
                 </div>
             </div>
@@ -82,7 +134,7 @@ function PaymentInformation() {
     )
 }
 
-function OrderSummary() {
+function OrderSummary({order}) {
 
         return (
             <div className={styles.orderSummaryBack}>
@@ -94,32 +146,32 @@ function OrderSummary() {
                     style: 'decimal',
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                }).format(12500)} лв.</a></div>
+                }).format(order.mejdinnaSuma)} лв.</a></div>
                 <div className={styles.discountText}><a>Отстъпка:</a></div>
                 <div className={styles.discountPrice}><a>-{new Intl.NumberFormat('en-US', {
                     style: 'decimal',
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                }).format(12500)} лв.</a></div>
+                }).format(order.discount)} лв.</a></div>
                 <div className={styles.grafitText}><a>Гравиране</a></div>
                 <div className={styles.grafitPrice}><a>{new Intl.NumberFormat('en-US', {
                     style: 'decimal',
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                }).format(12500)} лв.</a></div>
+                }).format(order.engravingPrice)} лв.</a></div>
                 <div className={styles.deliveryText}><a>Доставка:</a></div>
                 <div className={styles.deliveryPrice}><a>{new Intl.NumberFormat('en-US', {
                     style: 'decimal',
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                }).format(20)} лв.</a></div>
+                }).format(order.deliveryPrice)} лв.</a></div>
                 <div className={styles.line}><hr /></div>
                 <div className={styles.totalText}><a>Общо: </a></div>
                 <div className={styles.totalPrice}><a>{new Intl.NumberFormat('en-US', {
                     style: 'decimal',
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                }).format(12500)} лв.</a></div>
+                }).format(order.totalPrice)} лв.</a></div>
             </div>
         </div>
         );
@@ -152,7 +204,6 @@ function App({userID}) {
 
                 // Resolve all promises to get product details
                 const productsDetails = await Promise.all(productsPromises);
-                console.log(productsDetails)
                 // Assign product details back to the respective OrderProduct
                 const orderWithDetails = {
                     ...orderData,
@@ -161,7 +212,6 @@ function App({userID}) {
                         productDetails: productsDetails[index]
                     }))
                 };
-                console.log(orderWithDetails);
                 setOrder(orderWithDetails);
             } catch (error) {
                 console.error("Fetching order or products failed", error);
@@ -176,17 +226,17 @@ function App({userID}) {
 
     if (!loading)
     {
-        console.log(order);
 
         return (
             <>
-            <Header />
             <div className={styles.fullPage}>
-                <OrderHead />
-                <OrderProducts />
-                <PaymentInformation />
-                <OrderSummary />
+                <Header />
+                <OrderHead order={order}/>
+                <OrderProducts productsList={order.listOfProducts}/>
+                <PaymentInformation order={order} />
+                <OrderSummary order={order} />
             </div>
+            <Chat userid={userID} />
             </>
         );
     }

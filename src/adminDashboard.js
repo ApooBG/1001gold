@@ -1,6 +1,9 @@
 import styles from './adminDashboard.module.css';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
+import { useNavigate } from 'react-router-dom';
+import sendIcon from './images/sendIcon.png';
+
 
 function LeftMenu({ setCategory }) {
     return (
@@ -33,10 +36,25 @@ function RightMenu(category) {
             )
         }
 
+        if (category.category == "Чат")
+        {
+            return (
+                <DisplayChat />
+            )
+        }
+
         else {
+ 
+
+                let newDate = new Date()
+                let date = newDate.getDate();
+                let month = newDate.getMonth() + 1;
+                let year = newDate.getFullYear();
+                
+                console.log(`${year}${month<10?`0${month}`:`${month}`}${date}`);
             return (
                 <>
-                    <DisplayChat />
+                    <div style={{textAlign:"center", position: "absolute", top: "20%", left:"43%"}}><a style={{fontSize:"5vw"}}>Админ Панел <br /> {date}-{month}-{year} </a></div>
                 </>
             )
         }
@@ -44,22 +62,23 @@ function RightMenu(category) {
 }
 
 function ProductMenu(){
+    const [products, setProducts] = useState([]);
     return (
         <div className={styles.rightMenu}>
             <div className={styles.products}>
                 <div className={styles.addProduct}>
                     <a className={styles.title}>Създаване на продукт</a>
-                    <AddProduct />
+                    <AddProduct products={products} setProducts={setProducts}/>
                 </div>
 
                 <div className={styles.addProduct}>
                     <a className={styles.title}>Редактиране на продукт</a>
-                    <EditProduct />
+                    <EditProduct products={products} setProducts={setProducts}/>
                 </div>
             </div>
 
             <div className={styles.displayProducts}>
-                <DisplayProducts />
+                <DisplayProducts products={products} setProducts={setProducts}/>
             </div>
         </div>
     )
@@ -67,8 +86,14 @@ function ProductMenu(){
 }
 
 function Categories({ setCategory }) {
+    const navigate = useNavigate();
+    const handleRedirect = () => {
+        navigate('/'); // This will navigate to the home route
+    };
+
     return (
         <div className={styles.categories}>
+            <div onClick={handleRedirect} className={styles.flexItem}><a>Начало</a></div>
             <div onClick={() => setCategory("Продукти")} className={styles.flexItem}><a>Продукти</a></div>
             <div onClick={() => setCategory("Потребители")} className={styles.flexItem}><a>Потребители</a></div>
             <div onClick={() => setCategory("Поръчки")} className={styles.flexItem}><a>Поръчки</a></div>
@@ -77,7 +102,7 @@ function Categories({ setCategory }) {
     );
 }
 
-function AddProduct() {
+function AddProduct({products, setProducts}) {
     // State hooks for each input field and images
     const [name, setName] = useState('');
     const [quantity, setQuantity] = useState('');
@@ -139,6 +164,7 @@ function AddProduct() {
             console.error('Грешка:', error);
             alert('Продуктът не може да бъде създаден');
         }
+        fetchProducts(setProducts);
     };
 
     // Form JSX
@@ -182,8 +208,8 @@ function AddProduct() {
         </form>
     );
 }
-function EditProduct() {
-    const [products, setProducts] = useState([]);
+function EditProduct({products, setProducts}) {
+
     const [selectedProductId, setSelectedProductId] = useState('');
     const [productDetails, setProductDetails] = useState({
         name: '',
@@ -254,6 +280,7 @@ function EditProduct() {
             } else {
                 formData.append(key, productDetails[key]);
             }
+            
         });
     
         try {
@@ -271,6 +298,7 @@ function EditProduct() {
             console.error('Грешка:', error);
             alert('Промените не могат да се запазят');
         }
+        fetchProducts(setProducts);
     };
 
 
@@ -379,22 +407,21 @@ function EditProduct() {
         </form>
     );
 }
-
-function DisplayProducts() {
-    const [products, setProducts] = useState([]);
+const fetchProducts = async (setProducts) => {
+    const response = await fetch('http://localhost:5104/Product/GetProducts');
+    const data = await response.json();
+    setProducts(data);
+};
+function DisplayProducts({products, setProducts}) {
     const [searchTerm, setSearchTerm] = useState('');
     const [deleteProductId, setDeleteProductId] = useState('');
     const [discountDetails, setDiscountDetails] = useState({ id: '', discount: '' });
 
     useEffect(() => {
-        fetchProducts();
+        fetchProducts(setProducts);
     }, []);
 
-    const fetchProducts = async () => {
-        const response = await fetch('http://localhost:5104/Product/GetProducts');
-        const data = await response.json();
-        setProducts(data);
-    };
+
 
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -506,10 +533,15 @@ function DisplayOrders() {
     const [userId, setUserId] = useState('');
     const [dateBefore, setDateBefore] = useState('');
     const [status, setStatus] = useState('');
+    const navigate = useNavigate(); // create instance of navigate
 
     useEffect(() => {
         fetchOrders();
     }, []);
+
+    const redirectToOrder = (orderID) => {
+        navigate(`/order/${orderID}`);
+    };
     
     const clearFilters = async () => {
         setUserId('')
@@ -625,7 +657,7 @@ function DisplayOrders() {
                     </thead>
                     <tbody>
                         {filteredOrders.map((order) => (
-                            <tr key={order.id}>
+                           <tr key={order.id} onClick={() => redirectToOrder(order.id)} style={{ cursor: 'pointer' }}>
                                 <td>{order.id}</td>
                                 <td>{order.userID}</td>
                                 <td>{formatDateTime(order.dateOfOrder)}</td>
@@ -691,8 +723,34 @@ function DisplayUsers() {
         } 
     };
     const handleChangeUserRole = async (userid, newRole) => {
-        
-    }
+        try {
+            // Convert the role to the numeric value if needed
+            const roleValue = newRole; // Assume newRole is already the correct numeric value
+    
+            const response = await fetch(`http://localhost:5104/User/EditUserRole/${userid}?newUserRole=${roleValue}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('userToken')}`, // Assuming you store the token in localStorage
+                },
+            });
+    
+            if (!response.ok) {
+                // If the server responded with an error message, handle it here
+                const errorResponse = await response.text();
+                throw new Error(errorResponse || 'Unknown error occurred');
+            }
+    
+            // If the request was successful, update the UI or state as needed
+            alert('Ролята на потребителя е променена успешно.');
+            fetchUsers();
+    
+        } catch (error) {
+            console.error('Failed to change user role:', error);
+            alert(`Неуспешна промяна на ролята на потребителя: ${error.message || error}`);
+        }
+    };
+    
 
     const filteredUsers = users.filter(user =>
         user.id.toString().includes(searchTerm) && user.name.toLowerCase().includes(searchName.toLowerCase())
@@ -755,26 +813,117 @@ function DisplayUsers() {
     );
 }
 
+
 function DisplayChat() {
+    const [conversations, setConversations] = useState([]);
+    const [selectedConversation, setSelectedConversation] = useState([]);
+    const [messages, setMessages] = useState([]);
+    const [newMessageContent, setNewMessageContent] = useState('');
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    };
+
+    useEffect(() => {
+        fetchAllConversations();
+    }, []);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]); // Dependency on messages means this runs whenever messages change
+
+    const fetchAllConversations = async () => {
+        try {
+            const response = await fetch('http://localhost:5104/Chat/GetAllConversations');
+            const data = await response.json();
+            for (const conversation of data) {
+                const userResponse = await fetch(`http://localhost:5104/User/FindUser/${conversation.userID}`);
+                const userData = await userResponse.json();
+                conversation.userName = userData.name; // Assuming the user object has a 'name' property
+            }
+            setConversations(data);
+        } catch (error) {
+            console.error('Failed to fetch conversations:', error);
+        }
+    };
+
+    const fetchMessagesForUser = async (userID) => {
+        try {
+            const response = await fetch(`http://localhost:5104/Chat/GetConversationByUser?userID=${userID}`);
+            const data = await response.json();
+            setMessages(data.messages || []);
+            setSelectedConversation(data); // Keep track of the selected conversation
+        } catch (error) {
+            console.error('Failed to fetch messages for user:', error);
+        }
+    };
+
+    const handleSendClick = async () => {
+        if (!newMessageContent.trim()) return; // Don't send empty messages
+
+        try {
+            console.log(selectedConversation);
+            const response = await fetch('http://localhost:5104/Chat/AddMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: 0, // Assuming the backend generates the id
+                    conversationID: selectedConversation.id, // This should be retrieved from the selected conversation
+                    messageText: newMessageContent,
+                    isStaff: true, // Change accordingly if you are sending messages as a user
+                    dateTime: new Date().toISOString()
+                }),
+            });
+
+            if (response.ok) {
+                setNewMessageContent('');
+                fetchMessagesForUser(selectedConversation.userID); // Refresh messages
+            } else {
+                console.error('Failed to send message');
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    };
+
+    const handleNewMessageChange = (event) => {
+        setNewMessageContent(event.target.value);
+    };
+
     return (
-        <div className={styles.chat}>
-            <div className={styles.conversations}>
-                <div className={styles.conversation}>
-                    <a>7</a>
-                    <a>Ruslan</a>
+        <div className={styles.fullChat}>
+            <div className={styles.chat}>
+                <div className={styles.conversations}>
+                    {conversations.map((conv) => (
+                        <div key={conv.id} className={styles.conversation} onClick={() => fetchMessagesForUser(conv.userID)}>
+                            <a>{conv.userID}</a>
+                            <a>{conv.userName}</a>
+                        </div>
+                    ))}
                 </div>
-                <div className={styles.conversation}></div>
-                <div className={styles.conversation}></div>
-                <div className={styles.conversation}></div>
 
-                
+                <div className={styles.messages}>
+                    {messages.map((message) => (
+                        <div key={message.id} className={message.isStaff ? styles.adminMessage : styles.userMessage}>
+                            {message.messageText}
+                        </div>
+                    ))}
+                <div ref={messagesEndRef} />
+
+                </div>
             </div>
-
-            <div className={styles.messages}>
+            
+            <div className={styles.sendMessage}>
+                <textarea value={newMessageContent} onChange={handleNewMessageChange} />
+                <img src={sendIcon} onClick={handleSendClick} />
             </div>
         </div>
-    )
+    );
 }
+
 
 function App() {
     const [category, setCategory] = useState("");

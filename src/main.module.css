@@ -12,7 +12,6 @@
     }
     
     #header {
-      padding-left: 12.5%;
       height: auto;
     }
     
@@ -22,14 +21,15 @@
       justify-content: center;
       text-align: center;
       flex-wrap: wrap;
+      margin-left: 12.5vw;
     }
     
     .shopImage {
       display: block;
       margin: 0;
       width: 75vw;
-      margin-left: 12.5vw;
-    
+      padding-top: 1vw;
+      padding-bottom: 1vw;
       min-height: 100%;
     }
     
@@ -38,7 +38,6 @@
       .filterMenu {
         height: 4.5vw;
         width: 75vw;
-        margin-left: 12.5vw;
         margin-bottom: 3vw;
         background-color: #2E0002;
         z-index: 99;
@@ -113,7 +112,7 @@
       {
         width: 24vw;
         height: auto;
-        margin-left: 38vw;
+        margin-left: 25.5vw;
         margin-bottom: 4vw;
     
         display: flex;
@@ -203,12 +202,13 @@
         width: 75%;
         height: auto;
         position: relative;
-        left: 14.5%;
+        left: 3.4%;
         top: -50px;
+        gap: 2.5vw;
       }
     
       .grid-item {
-        margin-top: 20px;
+        margin-top: 9px;
         width: 15vw;
         height: 15vw;
         background-color: white;
@@ -252,8 +252,8 @@
       .grid-item .cartImage {
         width: 1.7vw;
         height: 1.7vw;
-        margin-left: 17%;
-        margin-top: 17.1%;
+        margin-left: 19.3%;
+        margin-top: 19.5%;
         position: absolute;
       }
     
@@ -285,9 +285,22 @@
         position: fixed;
         top: 10%;
         right: 4%;
-        z-index: 1;
+        z-index: 105;
+        gap: 0.3vw;
       }
-    
+      .outOfStockOverlay {
+        position: absolute;
+        width: 18.5%;
+        height: 25%;
+        background-color: rgba(0, 0, 0, 0.695); /* Gray background with some transparency */
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.8vw;
+      }
       /* ADD TO CART */
       .addToCart {
         width: auto;
@@ -333,7 +346,6 @@
         height: 140px;
         background-color: #2E0002; 
         width: 75vw;
-        margin-left: 12.5%;
         margin-bottom: 0.5%;
       }
     
