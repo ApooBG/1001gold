@@ -22,6 +22,12 @@ function Login() {
     deliveryType: 'Speedy', // Default selected value
     deliveryAddress: '',
     });
+    const [isRight, setIsRight] = useState(false);
+
+    const toggleSwitcher = () => {
+      setIsRight(!isRight); // Toggle the state
+      console.log(isRight);
+    };
 
         const handleLogin = async (e) => {
             e.preventDefault(); // Prevents the default form submit action
@@ -61,18 +67,26 @@ function Login() {
                     <img src={logo} />
                 </div>
                 <div className={styles.loginRegister}>
-                    <a>Вход <span onClick={() => setFormView(formView === 'login' ? 'register' : 'login')}>--</span> Регистрация</a>
+                    <div className={styles.labels}>
+                        <a>Вход</a>
+                        <div onClick={() => setFormView(formView === 'login' ? 'register' : 'login')}>
+                            <a>
+                            <div className={styles.switcherBack} onClick={toggleSwitcher}>
+                                <div className={`${styles.switcher} ${isRight ? styles.switcherRight : ''}`}></div>
+                            </div>
+                            </a>
+                        </div> 
+                        <a>Регистрация</a>
+                    </div>
     
                     {formView === 'login' ? (
                     <div className={styles.loginPanel}>
                     <form onSubmit={handleLogin}>
                         <div className={styles.email}>
-                            <label>Имейл: </label>
-                            <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            <input placeholder="Имейл..." type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div className={styles.password}>
-                            <label>Парола: </label>
-                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            <input placeholder="Парола..." type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
                         <button type="submit">Вход</button>
                         {error && <p>{error}</p>}

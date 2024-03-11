@@ -18,10 +18,30 @@ const formatDate = (dateString) => {
     return `${timeHours}:${timeMinutes} ${day}-${month}-${year}`;
 };
 
+const formatDateArrival = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // January is 0!
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+};
+
 const calculateArrivalDate = (dateString) => {
     const date = new Date(dateString);
-    date.setDate(date.getDate() + 2); // Add 2 days to the current date
-    return formatDate(date.toISOString()); // Reuse formatDate to get the desired output
+
+    // Get the day of the week: 0 (Sunday) - 6 (Saturday)
+    const dayOfWeek = date.getDay();
+
+    // If it's Friday (5), add 4 days
+    if (dayOfWeek === 5) {
+        date.setDate(date.getDate() + 4);
+    }
+    // Otherwise, add 2 days
+    else {
+        date.setDate(date.getDate() + 2);
+    }
+    
+    return formatDateArrival(date.toISOString()); // Reuse formatDate to get the desired output
 };
 
 

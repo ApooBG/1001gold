@@ -254,7 +254,8 @@ function EditProduct({products, setProducts}) {
             [field]: event.target.value,
         });
     };
-
+    // Function to increase the product quantity
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -421,7 +422,50 @@ function DisplayProducts({products, setProducts}) {
         fetchProducts(setProducts);
     }, []);
 
+    const increaseQuantity = async (productId) => {
+        try {
+            const response = await fetch(`http://localhost:5104/Product/ChangeQuantityByOne?add=true`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(productId),
+            });
 
+            if (!response.ok) {
+                throw new Error('Failed to update product quantity.');
+            }
+
+            // Handle successful update here, e.g., refresh the product list or show a message
+            fetchProducts(setProducts);
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle errors here, such as displaying an error message to the user
+        }
+    };
+
+    // Function to decrease the product quantity
+    const decreaseQuantity = async (productId) => {
+        try {
+            const response = await fetch(`http://localhost:5104/Product/ChangeQuantityByOne?add=false`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(productId),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update product quantity.');
+            }
+
+            // Handle successful update here
+            fetchProducts(setProducts);
+        } catch (error) {
+            console.error('Error:', error);
+            // Handle errors here
+        }
+    };
 
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -512,12 +556,12 @@ function DisplayProducts({products, setProducts}) {
                             <td>{product.id}</td>
                             <td><img src={'data:image/jpeg;base64,' + product.mainImageData} /></td>
                             <td>{product.name}</td>
-                            <td>${product.price}</td>
+                            <td>{product.price} лв.</td>
                             <td>{product.weight} г.</td>
                             <td>{product.quantity}</td>
                             <td>{product.category}</td>
-                            <td>{product.discount ? `${product.discount}% off` : 'No discount'}</td>
-                            <td><a>+</a> <a>-</a></td>
+                            <td>{product.discount ? `${product.discount}% Отстъпка` : 'Без Отстъпка'}</td>
+                            <td><a onClick={() => increaseQuantity(product.id)} style={{cursor:"pointer", backgroundColor:"green", display:"block", padding: "0.1vw", marginBottom: "0.5vw", color:"white", fontWeight:"900", fontSize:"1.2vw"}}>+</a> <a onClick={() => decreaseQuantity(product.id)} style={{cursor:"pointer", backgroundColor:"red", display:"block", padding: "0.1vw", color:"white", fontWeight:"900", fontSize:"1.2vw"}}>-</a></td>
                         </tr>
                         ))}
                     </tbody>

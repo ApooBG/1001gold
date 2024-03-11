@@ -12,6 +12,7 @@ function App({userid}) {
     const [conversationID, setConversationID] = useState(0);
     const [newMessageContent, setNewMessageContent] = useState('');
     const messagesEndRef = useRef(null);
+    
     console.log("CART" + userid);
 
     const scrollToBottom = () => {
@@ -33,8 +34,8 @@ function App({userid}) {
           }
       
           const newConversationData = await response.json();
+          console.log("NEW INFOOOOO " + newConversationData)
           setConversationID(newConversationData.id); // Assuming the response includes the ID of the new conversation
-          
           // Now that the conversation is created, you can fetch messages for it
           fetchMessages();
         } catch (error) {
@@ -43,6 +44,10 @@ function App({userid}) {
       };
 
     const changeChatVisibility = () => {
+        if (userid < 1)
+        {
+            window.location.reload();
+        }
         setDisplayChat(!displayChat);
     }
     
@@ -50,35 +55,43 @@ function App({userid}) {
         scrollToBottom();
     }, [messages, displayChat]); // Dependency on messages means this runs whenever messages change
     
-
-    const fetchMessages = async () => {
-        try {
-            const response = await fetch('http://localhost:5104/Chat/GetConversationByUser?userID=' + userid);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+    const fetchMessages = () => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch('http://localhost:5104/Chat/GetConversationByUser?userID=' + userid);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setConversationID(data.id);
+                // Assuming 'data.messages' is an array of message objects
+    
+                // Sort messages by dateTime in ascending order so the oldest is first
+                const sortedMessages = data.messages.sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
+    
+                setMessages(sortedMessages.map((msg, index) => ({
+                    id: index + 1, // Unique ID for the message
+                    senderID: msg.senderID, // Assuming there is a senderID field
+                    sentFromStaff: msg.isStaff,
+                    content: msg.messageText,
+                    dateTime: msg.dateTime // Including the dateTime to keep track of it
+                })));
+    
+                resolve(); // Resolve the promise after successfully setting the conversation ID and messages
+            } catch (error) {
+                console.error('Failed to fetch messages:', error);
+                reject(error); // Reject the promise if there was an error
             }
-            const data = await response.json();
-            setConversationID(data.id)
-            // Assuming 'data.messages' is an array of message objects
-            const sortedMessages = data.messages.sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
-            setMessages(sortedMessages.map((msg, index) => ({
-                id: index + 1, // Create a new id, because the ids might not be unique as shown in your initialMessages
-                senderID: 'userid', // Assuming '7' is a placeholder for the actual senderID
-                sentFromStaff: msg.isStaff,
-                content: msg.messageText
-            })));
-        } catch (error) {
-            console.error('Failed to fetch messages:', error);
-        }
+        });
     };
-
-    useEffect(() => {
-        fetchMessages();
-    }, []); // Fetch messages only when the component is mounted
 
 
         // Function to add a new message (for demonstration, this adds a predefined message)
         const addNewMessage = async () => {
+            if (conversationID == 0) {
+                await fetchMessages();
+                console.log(conversationID); // This should now log a non-zero ID
+            }
             // Prepare the message data
             const newMessage = {
                 conversationID: conversationID, 

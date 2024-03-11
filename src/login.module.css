@@ -23,6 +23,42 @@
 
   }
 
+  .loginRegister .labels {
+    display: flex;
+    justify-content: center;
+  }
+
+  .loginRegister .labels .switcherBack {
+    width: 4vw;
+    height: 2vw;
+    background-color: black;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+    padding-left: 5%;
+    padding-top: 7%;
+    border-radius: 25px;
+    position: relative; /* Make sure this is set to allow absolute positioning within */
+    cursor: pointer; /* Indicates clickable items */
+    overflow: hidden; /* Ensures the switcher doesn't overflow its container */
+  }
+
+  .loginRegister .labels .switcher {
+    background-color: gold;
+    width: 45%;
+    height: 80%;
+    border-radius: inherit;
+    position: absolute; /* Position it absolutely within switcherBack */
+    left: 7%; /* Start at the left side */
+    top: 10%; /* Adjust as needed for centering */
+    transition: left 0.3s ease; /* Transition for smooth sliding effect */
+  }
+  
+  .loginRegister .labels .switcherRight {
+    left: 48%; /* Set this to the percentage that moves it all the way to the right */
+    background-color: white;
+  
+  }
+
   .loginRegister a{
     display: block;
     padding-top: 1.5vw;

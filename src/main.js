@@ -194,6 +194,8 @@ function App({userid, isAdmin}) {
     const [productName, setProductName] = useState([]);
     const [cartMessages, setCartMessages] = useState([]);
 
+
+
     useEffect(() => {
         const url = "http://localhost:5104/Product/GetProducts";
         fetch(url)
@@ -240,6 +242,11 @@ function App({userid, isAdmin}) {
         .catch(error => {
             console.error(error); // Handle the error
         });
+
+        if (userid < 1)
+        {
+            window.location.reload();
+        }
     };
     
     // Render the messages on the top right of the screen
