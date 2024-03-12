@@ -29,7 +29,7 @@ function ProductImages({product}) {
 }
 
 function GetCartID({userID, setCartID}) {
-    const url = `http://localhost:5104/Cart/GetCartByUser/${userID}`;
+    const url = `${API_BASE_URL}/Cart/GetCartByUser/${userID}`;
     fetch(url)
         .then(response => {
             if (response.ok) {
@@ -61,7 +61,7 @@ function ProductDetails({product, userID}) {
 
     const addToCart = (cartID, productID) => {
         // Prepare the URL with query parameters
-        const url = new URL('http://localhost:5104/Cart/AddProductInCart');
+        const url = new URL(`${API_BASE_URL}/Cart/AddProductInCart`);
         url.searchParams.append('cartID', cartID);
         url.searchParams.append('productID', productID);
     
@@ -135,11 +135,11 @@ function Comments({product}) {
         {
             if (i <= stars.stars)
             {
-                starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/yellowStarImage.png`} key={i}/>)
+                starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/yellowStar.png`} key={i}/>)
             }
 
             else {
-                starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/starImage.png`} key={i}/>)
+                starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/star.png`} key={i}/>)
             }
         }
 
@@ -185,11 +185,11 @@ function AddReview({product, setLoading}) {
     for (let i = 1; i <= 5; i++) {
         if (i <= starClicked)
         {
-            starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/yellowStarImage.png`} key={i} onClick={() => handleStarClick(i)} style={{ cursor: 'pointer' }} alt="star"/>);
+            starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/yellowStar.png`} key={i} onClick={() => handleStarClick(i)} style={{ cursor: 'pointer' }} alt="star"/>);
         }
         else
         {
-            starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/starImage.png`} key={i} onClick={() => handleStarClick(i)} style={{ cursor: 'pointer' }} alt="star"/>);
+            starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/star.png`} key={i} onClick={() => handleStarClick(i)} style={{ cursor: 'pointer' }} alt="star"/>);
         }
     }
 
@@ -197,7 +197,7 @@ function AddReview({product, setLoading}) {
     const createReview = () => {
         setLoading(true); // Indicate loading start
         // Define the URL for the POST request
-        const url = "http://localhost:5104/Product/AddComment?productid=" + product.id;
+        const url = `${API_BASE_URL}/Product/AddComment?productid=` + product.id;
 
         // Create the data object to send
         const postData = {
@@ -259,7 +259,7 @@ function App({userid}) {
     }
     console.log(userid);
     useEffect(() => {
-        const url = "http://localhost:5104/Product/FindProduct/" + productID;
+        const url = `${API_BASE_URL}/Product/FindProduct/` + productID;
         fetch(url)
             .then((response) => response.json())
             .then((data) => setProduct(data));
