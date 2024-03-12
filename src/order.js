@@ -2,11 +2,8 @@ import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import Header from './header.js';
 import styles from './order.module.css';
-import earringImage from './images/earrings.png'
-import cashPayment from './images/cashPayLogo.png'
-import phoneNumber from './images/phoneIcon.png'
 import Chat from './chat.js'
-
+import { API_BASE_URL } from './config';
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -132,12 +129,12 @@ function PaymentInformation({order}) {
                     <div className={styles.paymentMethod}>
                         <div style={{textAlign: 'center', paddingTop: "0.5vw", fontSize: "1.3vw"}}>НАЧИН НА ПЛАЩАНЕ</div>
                         <div className={styles.cashPayment}>
-                            <img src={cashPayment} />
+                            <img src={`${process.env.PUBLIC_URL}/images/cashPayLogo.png`} />
                             <a>На място при доставка</a>
                         </div>
                     </div>
                     <div className={styles.phoneNumber}>
-                        <img src={phoneNumber} /> 
+                        <img src={`${process.env.PUBLIC_URL}/images/phoneIcon.png`} /> 
                         <a>{order.phoneNumber}</a>
                     </div>
 
@@ -206,7 +203,7 @@ function App({userID}) {
     useEffect(() => {
         const getOrder = async () => {
             try {
-                const orderResponse = await fetch(`http://localhost:5104/Order/GetOrder/${orderID}`);
+                const orderResponse = await fetch(`${API_BASE_URL}/Order/GetOrder/${orderID}`);
                 
                 if (!orderResponse.ok) {
                     throw new Error(`HTTP error! status: ${orderResponse.status}`);
@@ -215,7 +212,7 @@ function App({userID}) {
 
                 // Fetch product details for each OrderProduct
                 const productsPromises = orderData.listOfProducts.map(async (orderProduct) => {
-                    const productResponse = await fetch(`http://localhost:5104/Product/FindProduct/${orderProduct.productID}`);
+                    const productResponse = await fetch(`${API_BASE_URL}/Product/FindProduct/${orderProduct.productID}`);
                     if (!productResponse.ok) {
                         throw new Error(`HTTP error! status: ${productResponse.status}`);
                     }
@@ -250,7 +247,7 @@ function App({userID}) {
         return (
             <>
             <div className={styles.fullPage}>
-                <Header />
+                <Header isAdmin={false}/>
                 <OrderHead order={order}/>
                 <OrderProducts productsList={order.listOfProducts}/>
                 <PaymentInformation order={order} />

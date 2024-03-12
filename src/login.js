@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import styles from './login.module.css';
-import logo from './images/logo.jpg';
-
+import { API_BASE_URL } from './config';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -33,7 +32,7 @@ function Login() {
             e.preventDefault(); // Prevents the default form submit action
         
             try {
-                const response = await fetch('http://localhost:5104/User/Login', {
+                const response = await fetch(`${API_BASE_URL}/User/Login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -64,7 +63,7 @@ function Login() {
         return (
             <div className={styles.login}>
                 <div className={styles.image}>
-                    <img src={logo} />
+                    <img src={`${process.env.PUBLIC_URL}/images/logo.jpg`} />
                 </div>
                 <div className={styles.loginRegister}>
                     <div className={styles.labels}>
@@ -158,7 +157,7 @@ function RegistrationForm() {
         
                 // Check email availability
                 try {
-                    const response = await fetch('http://localhost:5104/User/CheckEmailAvilability', {
+                    const response = await fetch(`${API_BASE_URL}/User/CheckEmailAvilability`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -211,7 +210,7 @@ function RegistrationForm() {
     const submitRegistration = async () => {
         // Here, you will handle the form submission to your API endpoint
         try {
-            const response = await fetch('http://localhost:5104/User/Register', {
+            const response = await fetch(`${API_BASE_URL}/User/Register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -2,8 +2,7 @@ import styles from './adminDashboard.module.css';
 import React, {useState, useRef, useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import { useNavigate } from 'react-router-dom';
-import sendIcon from './images/sendIcon.png';
-
+import { API_BASE_URL } from './config';
 
 function LeftMenu({ setCategory }) {
     return (
@@ -146,7 +145,7 @@ function AddProduct({products, setProducts}) {
 
         // Make an API request to create the product
         try {
-            const response = await fetch('http://localhost:5104/Product/AddProduct', {
+            const response = await fetch(`${API_BASE_URL}/Product/AddProduct`, {
                 method: 'POST',
                 body: formData // Send formData as the request body
                 // No 'Content-Type' header required, browser sets 'multipart/form-data'
@@ -224,14 +223,14 @@ function EditProduct({products, setProducts}) {
 
     useEffect(() => {
         // Fetch all products for the dropdown
-        fetch('http://localhost:5104/Product/GetProducts')
+        fetch(`${API_BASE_URL}/Product/GetProducts`)
             .then((response) => response.json())
             .then(setProducts);
     }, []);
 
     useEffect(() => {
         if (selectedProductId) {
-            fetch(`http://localhost:5104/Product/FindProduct/${selectedProductId}`)
+            fetch(`${API_BASE_URL}/Product/FindProduct/${selectedProductId}`)
                 .then((response) => response.json())
                 .then((data) => {
                     setProductDetails({
@@ -285,7 +284,7 @@ function EditProduct({products, setProducts}) {
         });
     
         try {
-            const response = await fetch(`http://localhost:5104/Product/EditProduct/${selectedProductId}`, {
+            const response = await fetch(`${API_BASE_URL}/Product/EditProduct/${selectedProductId}`, {
                 method: 'POST',
                 body: formData,
             });
@@ -409,7 +408,7 @@ function EditProduct({products, setProducts}) {
     );
 }
 const fetchProducts = async (setProducts) => {
-    const response = await fetch('http://localhost:5104/Product/GetProducts');
+    const response = await fetch(`${API_BASE_URL}/Product/GetProducts`);
     const data = await response.json();
     setProducts(data);
 };
@@ -424,7 +423,7 @@ function DisplayProducts({products, setProducts}) {
 
     const increaseQuantity = async (productId) => {
         try {
-            const response = await fetch(`http://localhost:5104/Product/ChangeQuantityByOne?add=true`, {
+            const response = await fetch(`${API_BASE_URL}/Product/ChangeQuantityByOne?add=true`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -447,7 +446,7 @@ function DisplayProducts({products, setProducts}) {
     // Function to decrease the product quantity
     const decreaseQuantity = async (productId) => {
         try {
-            const response = await fetch(`http://localhost:5104/Product/ChangeQuantityByOne?add=false`, {
+            const response = await fetch(`${API_BASE_URL}/Product/ChangeQuantityByOne?add=false`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -474,7 +473,7 @@ function DisplayProducts({products, setProducts}) {
 
     const handleDelete = async () => {
         if (deleteProductId) {
-            const response = await fetch(`http://localhost:5104/Product/DeleteProduct?productid=${deleteProductId}`, { method: 'GET' });
+            const response = await fetch(`${API_BASE_URL}/Product/DeleteProduct?productid=${deleteProductId}`, { method: 'GET' });
             if(response.ok){
                 fetchProducts(); // Refresh the list
                 alert('Продуктът беше премахнат успешно.');
@@ -489,7 +488,7 @@ function DisplayProducts({products, setProducts}) {
     const applyDiscount = async () => {
         if (discountDetails.id && discountDetails.discount) {
             // Assuming you have an endpoint to update a product's discount
-            const response = await fetch(`http://localhost:5104/Product/AddDiscount?productid=${discountDetails.id}&discount=${discountDetails.discount}`, { method: 'POST' });
+            const response = await fetch(`${API_BASE_URL}/Product/AddDiscount?productid=${discountDetails.id}&discount=${discountDetails.discount}`, { method: 'POST' });
             if (response.ok) {
                 fetchProducts(); // Refresh the list
                 alert("Успешно променихте отстъпката на продукта.")
@@ -592,22 +591,22 @@ function DisplayOrders() {
         setSearchTerm('')
         setDateBefore('')
         setStatus('')
-        const response = await fetch('http://localhost:5104/Order/GetAllOrders');
+        const response = await fetch(`${API_BASE_URL}/Order/GetAllOrders`);
         const data = await response.json();
         setOrders(data);
     }
 
     const fetchOrders = async () => {
-        let url = 'http://localhost:5104/Order/GetAllOrders';
+        let url = `${API_BASE_URL}/Order/GetAllOrders`;
         if (userId) {
-            url = `http://localhost:5104/Order/GetAllUserOrders/${userId}`;
+            url = `${API_BASE_URL}/Order/GetAllUserOrders/${userId}`;
         } else if (status && dateBefore) {
-            url = `http://localhost:5104/Order/GetOrdersByStatusAndBefore?status=${status}&date=${dateBefore}`
+            url = `${API_BASE_URL}/Order/GetOrdersByStatusAndBefore?status=${status}&date=${dateBefore}`
         }
         else if (status) {
-            url = `http://localhost:5104/Order/GetOrdersByStatus?status=${status}`;
+            url = `${API_BASE_URL}/Order/GetOrdersByStatus?status=${status}`;
         } else if (dateBefore) {
-            url = `http://localhost:5104/Order/GetOrdersBefore?date=${dateBefore}`;
+            url = `${API_BASE_URL}/Order/GetOrdersBefore?date=${dateBefore}`;
         } 
         const response = await fetch(url);
         const data = await response.json();
@@ -615,7 +614,7 @@ function DisplayOrders() {
     };
     const handleStatusChange = async (orderId, newStatus) => {
         try {
-            const response = await fetch(`http://localhost:5104/Order/UpdateStatus/${orderId}?status=${newStatus}`, {
+            const response = await fetch(`${API_BASE_URL}/Order/UpdateStatus/${orderId}?status=${newStatus}`, {
                 method: 'POST',
                 headers: {
                     // Your headers here, if any are needed
@@ -742,7 +741,7 @@ function DisplayUsers() {
     }, []);
 
     const fetchUsers = async () => {
-        const response = await fetch('http://localhost:5104/User/GetAllUsers');
+        const response = await fetch(`${API_BASE_URL}/User/GetAllUsers`);
         const data = await response.json();
         setUsers(data);
     };
@@ -753,7 +752,7 @@ function DisplayUsers() {
         
         // If the user clicks "OK", the value of isConfirmed will be true
         if (isConfirmed) {
-            const response = await fetch(`http://localhost:5104/User/DeleteUser/${userId}`, {
+            const response = await fetch(`${API_BASE_URL}/User/DeleteUser/${userId}`, {
                 method: 'DELETE'
             });
             if (response.ok) {
@@ -771,7 +770,7 @@ function DisplayUsers() {
             // Convert the role to the numeric value if needed
             const roleValue = newRole; // Assume newRole is already the correct numeric value
     
-            const response = await fetch(`http://localhost:5104/User/EditUserRole/${userid}?newUserRole=${roleValue}`, {
+            const response = await fetch(`${API_BASE_URL}/User/EditUserRole/${userid}?newUserRole=${roleValue}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -879,10 +878,10 @@ function DisplayChat() {
 
     const fetchAllConversations = async () => {
         try {
-            const response = await fetch('http://localhost:5104/Chat/GetAllConversations');
+            const response = await fetch(`${API_BASE_URL}/Chat/GetAllConversations`);
             const data = await response.json();
             for (const conversation of data) {
-                const userResponse = await fetch(`http://localhost:5104/User/FindUser/${conversation.userID}`);
+                const userResponse = await fetch(`${API_BASE_URL}/User/FindUser/${conversation.userID}`);
                 const userData = await userResponse.json();
                 conversation.userName = userData.name; // Assuming the user object has a 'name' property
             }
@@ -894,7 +893,7 @@ function DisplayChat() {
 
     const fetchMessagesForUser = async (userID) => {
         try {
-            const response = await fetch(`http://localhost:5104/Chat/GetConversationByUser?userID=${userID}`);
+            const response = await fetch(`${API_BASE_URL}/Chat/GetConversationByUser?userID=${userID}`);
             const data = await response.json();
             setMessages(data.messages || []);
             setSelectedConversation(data); // Keep track of the selected conversation
@@ -908,7 +907,7 @@ function DisplayChat() {
 
         try {
             console.log(selectedConversation);
-            const response = await fetch('http://localhost:5104/Chat/AddMessage', {
+            const response = await fetch(`${API_BASE_URL}/Chat/AddMessage`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -962,7 +961,7 @@ function DisplayChat() {
             
             <div className={styles.sendMessage}>
                 <textarea value={newMessageContent} onChange={handleNewMessageChange} />
-                <img src={sendIcon} onClick={handleSendClick} />
+                <img src={`${process.env.PUBLIC_URL}/images/sendIcon.png`} onClick={handleSendClick} />
             </div>
         </div>
     );

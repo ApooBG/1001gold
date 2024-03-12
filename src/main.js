@@ -1,21 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import styles from './main.module.css';
-import shopImage from './images/logo.jpg';
-import searchIcon from './images/SearchIcon.png';
-import cartImage from './images/cart.png';
 import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import Header from './header';
 import Chat from './chat.js';
-
+import { API_BASE_URL } from './config';
 
 const products = [];
 
 function Image() {
     return (
-            <img className={styles.shopImage} src={shopImage} />
+            <img className={styles.shopImage} src={`${process.env.PUBLIC_URL}/images/logo.jpg`} />
     )
 }
 
@@ -46,7 +43,7 @@ function FilterMenu({ products, setFilteredProducts }) {
                 <li><a className={activeCategory === 'Обеци' ? styles.activeCategory : styles.category} onClick={() => filterProductList('Обеци')}>ОБЕЦИ</a></li>
                 <div className={styles.filterSearchbar} id="filterSearchbar" >
                     <input onChange={(e) => findProductsByName(e.target.value)} type="text" className={styles.filterText} id="filterText"/>
-                    <img className={styles.SearchIcon} src={searchIcon} />
+                    <img className={styles.SearchIcon} src={`${process.env.PUBLIC_URL}/images/SearchIcon.png`} />
                 </div>
             </ul>
         </div>
@@ -54,7 +51,7 @@ function FilterMenu({ products, setFilteredProducts }) {
 }
 
 function GetCartID(userID, setCartID) {
-    const url = `http://localhost:5104/Cart/GetCartByUser/${userID}`;
+    const url = `${API_BASE_URL}/Cart/GetCartByUser/${userID}`;
     fetch(url)
         .then(response => {
             if (response.ok) {
@@ -75,6 +72,7 @@ function GetCartID(userID, setCartID) {
 
 function Products({ products, addToCart, userid }) {
     const [cartID, setCartID] = useState(null);
+    const navigate = useNavigate(); 
     let currentPage = read_cookie("CurrentPage");
     let maxItemsOnPage = 28;
 
@@ -96,8 +94,7 @@ function Products({ products, addToCart, userid }) {
 
     const items = products.slice(firstItemPage, lastItemPage).map((product, index) => (
         
-        <div className={styles['grid-item']} key={product.id}>
-        <Link to={`/product/${product.id}`} style={{ color: 'black' }}>
+        <div className={styles['grid-item']} key={product.id} onClick={() => navigate(`/product/${product.id}`)} style={{ cursor: 'pointer' }}>
           <div className={styles.picture}>
             {product.quantity < 1 && (
               <div className={styles.outOfStockOverlay}>
@@ -106,7 +103,6 @@ function Products({ products, addToCart, userid }) {
             )}
             <img className={styles.productPicture} src={'data:image/jpeg;base64,' + product.mainImageData} />
           </div>
-        </Link>
             <div className={styles.title}><a>{product.name} {product.weight}гр</a></div>
             <div className={styles.price}>
                 <a>{new Intl.NumberFormat('en-US', {
@@ -116,7 +112,7 @@ function Products({ products, addToCart, userid }) {
                 }).format(product.price)} лв.</a>
             </div>
             <div className={styles.cartImage}>
-                {product.quantity >= 1 && (<img onClick={() => addToCart(product.name, cartID, product.id)} className={styles.cart} src={cartImage} />)}
+                {product.quantity >= 1 && (<img onClick={() => addToCart(product.name, cartID, product.id)} className={styles.cart} src={`${process.env.PUBLIC_URL}/images/cart.png`} />)}
             </div>
         </div>
     ));
@@ -197,7 +193,7 @@ function App({userid, isAdmin}) {
 
 
     useEffect(() => {
-        const url = "http://localhost:5104/Product/GetProducts";
+        const url = `${API_BASE_URL}/Product/GetProducts`;
         fetch(url)
             .then((response) => response.json())
             .then((data) => setProducts(data) )
@@ -209,7 +205,7 @@ function App({userid, isAdmin}) {
     const addToCart = (name, cartID, productID) => {
         // Create a message object with a unique id
         
-        const url = new URL('http://localhost:5104/Cart/AddProductInCart');
+        const url = new URL(`${API_BASE_URL}/Cart/AddProductInCart`);
         url.searchParams.append('cartID', cartID);
         url.searchParams.append('productID', productID);
     

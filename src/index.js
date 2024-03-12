@@ -10,6 +10,7 @@ import Admin from './adminDashboard.js';
 import Order from './order.js';
 import Chat from './chat.js';
 import { getUserDataFromToken } from './authService';
+import { API_BASE_URL } from './config';
 
 // This function checks if the user is authenticated
 function isAuthenticated() {
@@ -44,7 +45,7 @@ function App() {
 
         const fetchUserRoleById = async (id) => {
             try {
-                const response = await fetch(`http://localhost:5104/User/GetUserRoleById?id=${id}`, {
+                const response = await fetch(`${API_BASE_URL}/User/GetUserRoleById?id=${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -65,7 +66,7 @@ function App() {
 
         const fetchUserIdByEmail = async (userData) => {
             try {
-                const response = await fetch(`http://localhost:5104/User/GetUserIdByEmail?email=${encodeURIComponent(userData.email)}`, {
+                const response = await fetch(`${API_BASE_URL}/User/GetUserIdByEmail?email=${encodeURIComponent(userData.email)}`, {
                     method: 'GET', // Assuming it's a GET request, update if it's otherwise
                     headers: {
                         'Content-Type': 'application/json',
@@ -96,11 +97,11 @@ function App() {
     if (userRole == 1)
     {
         return (
-            <BrowserRouter>
+            <BrowserRouter basename='/'>
             <div>
                 <Routes>
                     <Route index element={<PrivateRoute><MainPage userid={userid} isAdmin={true} /></PrivateRoute>} />
-                    <Route path="/product/:productId" element={<PrivateRoute><Product userid={userid}/></PrivateRoute>} />
+                    <Route path="/product/:productID" element={<PrivateRoute><Product userid={userid}/></PrivateRoute>} />
                     <Route path="/cart" element={<PrivateRoute><Cart userID={userid} /></PrivateRoute>} />
                     <Route path="/admin" element={<PrivateRoute><Admin /></PrivateRoute>} />
                     {/* Use PublicRoute for the login page */}

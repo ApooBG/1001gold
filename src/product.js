@@ -1,16 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import Header from './header.js';
 import styles from './product.module.css';
 import { useState, useEffect } from "react";
-
-import earringsImage from './images/earrings.png';
-import armbandImage from './images/armband.png';
-import ringImage from './images/ring.png';
-import necklaceImage from './images/necklace.png';
-import starImage from './images/star.png';
-import yellowStarImage from './images/yellowStar.png';
 import Chat from './chat.js';
+import { useParams, useNavigate } from 'react-router-dom';
+
 
 
 
@@ -141,11 +135,11 @@ function Comments({product}) {
         {
             if (i <= stars.stars)
             {
-                starImagesList.push(<img src={yellowStarImage} key={i}/>)
+                starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/yellowStarImage.png`} key={i}/>)
             }
 
             else {
-                starImagesList.push(<img src={starImage} key={i}/>)
+                starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/starImage.png`} key={i}/>)
             }
         }
 
@@ -191,11 +185,11 @@ function AddReview({product, setLoading}) {
     for (let i = 1; i <= 5; i++) {
         if (i <= starClicked)
         {
-            starImagesList.push(<img src={yellowStarImage} key={i} onClick={() => handleStarClick(i)} style={{ cursor: 'pointer' }} alt="star"/>);
+            starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/yellowStarImage.png`} key={i} onClick={() => handleStarClick(i)} style={{ cursor: 'pointer' }} alt="star"/>);
         }
         else
         {
-            starImagesList.push(<img src={starImage} key={i} onClick={() => handleStarClick(i)} style={{ cursor: 'pointer' }} alt="star"/>);
+            starImagesList.push(<img src={`${process.env.PUBLIC_URL}/images/starImage.png`} key={i} onClick={() => handleStarClick(i)} style={{ cursor: 'pointer' }} alt="star"/>);
         }
     }
 
@@ -252,9 +246,17 @@ function AddReview({product, setLoading}) {
 }
 
 function App({userid}) {
-    let productID = window.location.pathname.split('/')[window.location.pathname.split('/').length-1];
+    let { productID } = useParams();
     var [CurrentProduct, setProduct] = useState([]);
     var [loading, setLoading] = useState(true);
+    const navigate = useNavigate(); 
+    if (productID == null)
+    {
+        navigate(`/`);
+    }
+    else {
+        
+    }
     console.log(userid);
     useEffect(() => {
         const url = "http://localhost:5104/Product/FindProduct/" + productID;
@@ -273,16 +275,14 @@ function App({userid}) {
 
     if (!loading && CurrentProduct.id > 0)
     {
-        console.log("PRODUCT " + userid)
         return (
             <div className={styles.fullPage}>
-            <Header />
-
-                    <ProductImages product={CurrentProduct} />
-                    <ProductDetails product={CurrentProduct} userID={userid} />
-                    <Comments product={CurrentProduct} />
-                    <AddReview product={CurrentProduct} setLoading={setLoading} />
-                    <Chat userid={userid} />
+                <Header isAdmin={false} />
+                <ProductImages product={CurrentProduct} />
+                <ProductDetails product={CurrentProduct} userID={userid} />
+                <Comments product={CurrentProduct} />
+                <AddReview product={CurrentProduct} setLoading={setLoading} />
+                <Chat userid={userid} />
             </div>
         );
     }

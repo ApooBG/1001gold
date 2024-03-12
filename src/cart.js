@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import Header from './header.js';
 import styles from './cart.module.css';
-import earringsImage from './images/earrings.png';
 import Chat from './chat.js';
+import { API_BASE_URL } from './config';
 
 function Address({userid}) {
     const [user, setUser] = useState([]);
@@ -66,7 +66,7 @@ function Payment({userid}) {
 function CartItems({cart, fetchCart}) {
     const removeProductFromCart = async (cartID, productID) => {
         try {
-            const response = await fetch(`http://localhost:5104/Cart/RemoveCartProduct?cartID=${cartID}&productID=${productID}`, {
+            const response = await fetch(`${API_BASE_URL}/Cart/RemoveCartProduct?cartID=${cartID}&productID=${productID}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ function OrderSummary({ cart, userid }) {
     
         // Make the fetch API call
         try {
-            const response = await fetch('http://localhost:5104/Order/AddOrder', {
+            const response = await fetch(`${API_BASE_URL}/Order/AddOrder`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -242,7 +242,7 @@ function OrderSummary({ cart, userid }) {
 
 async function GetUser(userID) {
     // Define the URL using the userID
-    const url = `http://localhost:5104/User/FindUser/${userID}`;
+    const url = `${API_BASE_URL}/User/FindUser/${userID}`;
   
     try {
       // Make the GET request to the API
@@ -271,13 +271,13 @@ function App({userID}) {
     const fetchCart = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:5104/Cart/GetCartByUser/${userID}`);
+            const response = await fetch(`${API_BASE_URL}/Cart/GetCartByUser/${userID}`);
             if (!response.ok) {
                 throw new Error('Fetching cart failed');
             }
             const cartData = await response.json();
             if (!cartData || cartData.isEmpty) {
-                const addCartResponse = await fetch(`http://localhost:5104/Cart/AddCart?UserID=${userID}&MejdinnaSuma=0&Discount=0&EngravingPrice=0&DeliveryPrice=0&TotalPrice=0`, {
+                const addCartResponse = await fetch(`${API_BASE_URL}/Cart/AddCart?UserID=${userID}&MejdinnaSuma=0&Discount=0&EngravingPrice=0&DeliveryPrice=0&TotalPrice=0`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

@@ -1,10 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import ReactDOM from 'react-dom/client';
 import styles from './chat.module.css';
-import logo from './images/logo.jpg';
-import sendIcon from './images/sendIcon.png';
-
-
+import { API_BASE_URL } from './config';
 
 function App({userid}) {
     const [displayChat, setDisplayChat] = useState(false);
@@ -21,7 +18,7 @@ function App({userid}) {
 
     const createConversation = async () => {
         try {
-          const response = await fetch(`http://localhost:5104/Chat/CreateConversation?userID=${userid}`, {
+          const response = await fetch(`${API_BASE_URL}/Chat/CreateConversation?userID=${userid}`, {
             method: 'POST', // Assuming POST is the correct method for this endpoint
             headers: {
               'Content-Type': 'application/json',
@@ -58,7 +55,7 @@ function App({userid}) {
     const fetchMessages = () => {
         return new Promise(async (resolve, reject) => {
             try {
-                const response = await fetch('http://localhost:5104/Chat/GetConversationByUser?userID=' + userid);
+                const response = await fetch(`${API_BASE_URL}/Chat/GetConversationByUser?userID=` + userid);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -106,7 +103,7 @@ function App({userid}) {
             }
     
             try {
-                const response = await fetch('http://localhost:5104/Chat/AddMessage', {
+                const response = await fetch(`${API_BASE_URL}/Chat/AddMessage`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -140,7 +137,7 @@ function App({userid}) {
             <div className={styles.chat}>
                 <div onClick={changeChatVisibility} className={styles.minimize}> </div>
                 <div className={styles.header}>
-                    <div className={styles.image}><img src={logo}/></div>
+                    <div className={styles.image}><img src={`${process.env.PUBLIC_URL}/images/logo.jpg`}/></div>
                     <div className={styles.text}><h2>1001GOLD</h2>
                     <a>чат със support</a></div>
                 </div>
@@ -158,7 +155,7 @@ function App({userid}) {
                 <div className={styles.sendMessageBack}>
                     <div className={styles.sendMessage}>
                         <textarea value={newMessageContent} onChange={handleInputChange} />
-                        <img src={sendIcon} onClick={addNewMessage} />
+                        <img src={`${process.env.PUBLIC_URL}/images/sendIcon.png`} onClick={addNewMessage} />
                     </div>
                 </div>
             </div>
